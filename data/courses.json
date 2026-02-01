@@ -1,0 +1,420 @@
+[
+  {
+    "id": "c1",
+    "title": "Introduction to Programming",
+    "description": "Learn the fundamentals of programming with Python",
+    "skills": [
+      "Programming Basics",
+      "Python"
+    ],
+    "prerequisites": [],
+    "difficulty": "Beginner",
+    "time": "3h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c2",
+    "title": "Data Structures & Algorithms",
+    "description": "Master essential data structures and algorithmic problem solving",
+    "skills": [
+      "Data Structures",
+      "Algorithms",
+      "Python"
+    ],
+    "prerequisites": [
+      "c1"
+    ],
+    "difficulty": "Intermediate",
+    "time": "5h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c3",
+    "title": "Advanced Algorithms",
+    "description": "Deep dive into complex algorithms and optimization techniques",
+    "skills": [
+      "Algorithms",
+      "Optimization"
+    ],
+    "prerequisites": [
+      "c2"
+    ],
+    "difficulty": "Advanced",
+    "time": "6h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c4",
+    "title": "Web Development Basics",
+    "description": "Build modern web applications with HTML, CSS, and JavaScript",
+    "skills": [
+      "Web Development",
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "prerequisites": [
+      "c1"
+    ],
+    "difficulty": "Beginner",
+    "time": "4h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c5",
+    "title": "REST API Development",
+    "description": "Design and build RESTful web services",
+    "skills": [
+      "REST APIs",
+      "API Design",
+      "Backend"
+    ],
+    "prerequisites": [
+      "c1",
+      "c4"
+    ],
+    "difficulty": "Intermediate",
+    "time": "3h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c6",
+    "title": "Authentication & Security",
+    "description": "Implement secure authentication mechanisms and best practices",
+    "skills": [
+      "Authentication",
+      "Security",
+      "Encryption"
+    ],
+    "prerequisites": [
+      "c5"
+    ],
+    "difficulty": "Intermediate",
+    "time": "2h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c7",
+    "title": "Database Design",
+    "description": "Learn relational database design principles and SQL",
+    "skills": [
+      "Databases",
+      "SQL",
+      "Data Modeling"
+    ],
+    "prerequisites": [
+      "c1",
+      "c2"
+    ],
+    "difficulty": "Intermediate",
+    "time": "4h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c8",
+    "title": "Full Stack Web Development",
+    "description": "Combine frontend and backend skills to build complete web applications",
+    "skills": [
+      "Web Development",
+      "Full Stack",
+      "Backend",
+      "Frontend"
+    ],
+    "prerequisites": [
+      "c4",
+      "c5",
+      "c7"
+    ],
+    "difficulty": "Advanced",
+    "time": "8h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c9",
+    "title": "Machine Learning Fundamentals",
+    "description": "Introduction to machine learning concepts and applications",
+    "skills": [
+      "Machine Learning",
+      "Python",
+      "Data Analysis"
+    ],
+    "prerequisites": [
+      "c1",
+      "c2"
+    ],
+    "difficulty": "Intermediate",
+    "time": "5h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c10",
+    "title": "Advanced Machine Learning",
+    "description": "Advanced techniques in deep learning and neural networks",
+    "skills": [
+      "Deep Learning",
+      "Neural Networks",
+      "Machine Learning"
+    ],
+    "prerequisites": [
+      "c9",
+      "c3"
+    ],
+    "difficulty": "Advanced",
+    "time": "7h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c11",
+    "title": "Cloud Computing Basics",
+    "description": "Deploy applications on cloud platforms like AWS and Azure",
+    "skills": [
+      "Cloud Computing",
+      "AWS",
+      "DevOps"
+    ],
+    "prerequisites": [
+      "c5",
+      "c8"
+    ],
+    "difficulty": "Intermediate",
+    "time": "4h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c12",
+    "title": "DevOps & CI/CD",
+    "description": "Implement continuous integration and continuous deployment pipelines",
+    "skills": [
+      "DevOps",
+      "CI/CD",
+      "Docker",
+      "Kubernetes"
+    ],
+    "prerequisites": [
+      "c11"
+    ],
+    "difficulty": "Advanced",
+    "time": "5h",
+    "instructor": "AI Academy"
+  },
+  {
+    "id": "c13",
+    "title": "The Complete JavaScript Course 2024",
+    "description": "Master JavaScript with modern ES6+ syntax and practical projects",
+    "skills": ["JavaScript", "Web Development", "ES6"],
+    "prerequisites": ["c4"],
+    "difficulty": "Beginner",
+    "time": "30h",
+    "instructor": "Jonas Schmedtmann",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c14",
+    "title": "React - The Complete Guide",
+    "description": "Build interactive UIs with React including hooks and state management",
+    "skills": ["React", "JavaScript", "Frontend"],
+    "prerequisites": ["c13"],
+    "difficulty": "Intermediate",
+    "time": "40h",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c15",
+    "title": "Node.js - The Complete Guide",
+    "description": "Build scalable server-side applications with Node.js and Express",
+    "skills": ["Node.js", "Backend", "Express.js"],
+    "prerequisites": ["c13", "c5"],
+    "difficulty": "Intermediate",
+    "time": "35h",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c16",
+    "title": "MongoDB & Mongoose - Comprehensive Tutorial",
+    "description": "Master MongoDB database design and implementation with Mongoose",
+    "skills": ["MongoDB", "Databases", "NoSQL"],
+    "prerequisites": ["c15"],
+    "difficulty": "Intermediate",
+    "time": "20h",
+    "instructor": "Brad Traversy",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c17",
+    "title": "AWS Certified Solutions Architect",
+    "description": "Prepare for AWS certification with cloud architecture best practices",
+    "skills": ["AWS", "Cloud Computing", "Architecture"],
+    "prerequisites": ["c11"],
+    "difficulty": "Advanced",
+    "time": "25h",
+    "instructor": "Stephane Maarek",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c18",
+    "title": "Docker & Kubernetes Mastery",
+    "description": "Complete guide to containerization and orchestration with Docker and Kubernetes",
+    "skills": ["Docker", "Kubernetes", "Containerization"],
+    "prerequisites": ["c12", "c15"],
+    "difficulty": "Advanced",
+    "time": "28h",
+    "instructor": "Brad Traversy",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c19",
+    "title": "Python for Data Science and Machine Learning",
+    "description": "Learn Python for data analysis, visualization, and ML with real datasets",
+    "skills": ["Python", "Data Science", "Machine Learning", "Pandas"],
+    "prerequisites": ["c1", "c9"],
+    "difficulty": "Intermediate",
+    "time": "22h",
+    "instructor": "José Portilla",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c20",
+    "title": "TensorFlow Developer Certificate",
+    "description": "Build and train deep learning models with TensorFlow and Keras",
+    "skills": ["TensorFlow", "Deep Learning", "Neural Networks"],
+    "prerequisites": ["c10", "c19"],
+    "difficulty": "Advanced",
+    "time": "32h",
+    "instructor": "Coursera Official",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c21",
+    "title": "Google Cloud Associate Cloud Engineer",
+    "description": "Master Google Cloud Platform services and cloud architecture",
+    "skills": ["Google Cloud", "Cloud Computing", "GCP"],
+    "prerequisites": ["c11"],
+    "difficulty": "Intermediate",
+    "time": "24h",
+    "instructor": "Coursera Official",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c22",
+    "title": "Applied Data Science with Python",
+    "description": "Comprehensive Python data science specialization with real-world projects",
+    "skills": ["Python", "Data Science", "NumPy", "Scikit-learn"],
+    "prerequisites": ["c1", "c2"],
+    "difficulty": "Intermediate",
+    "time": "28h",
+    "instructor": "University of Michigan",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c23",
+    "title": "Machine Learning Specialization",
+    "description": "Master machine learning algorithms and implementation from Stanford",
+    "skills": ["Machine Learning", "Algorithms", "Supervised Learning"],
+    "prerequisites": ["c9"],
+    "difficulty": "Advanced",
+    "time": "36h",
+    "instructor": "Andrew Ng",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c24",
+    "title": "Web Design for Everybody",
+    "description": "Learn responsive web design and best practices for modern web",
+    "skills": ["Web Design", "Responsive Design", "CSS"],
+    "prerequisites": ["c4"],
+    "difficulty": "Beginner",
+    "time": "18h",
+    "instructor": "University of Michigan",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c25",
+    "title": "Full Stack Web and Multiplatform Mobile Development",
+    "description": "Build cross-platform apps with React and React Native",
+    "skills": ["React", "React Native", "Mobile Development", "Full Stack"],
+    "prerequisites": ["c14"],
+    "difficulty": "Advanced",
+    "time": "30h",
+    "instructor": "The Hong Kong University",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c26",
+    "title": "Cybersecurity and Ethical Hacking",
+    "description": "Learn cybersecurity fundamentals, penetration testing, and secure coding",
+    "skills": ["Cybersecurity", "Ethical Hacking", "Security"],
+    "prerequisites": ["c6"],
+    "difficulty": "Advanced",
+    "time": "26h",
+    "instructor": "EC-Council",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c27",
+    "title": "SQL & Database Design Masterclass",
+    "description": "Advanced SQL queries, database optimization, and performance tuning",
+    "skills": ["SQL", "Databases", "Query Optimization"],
+    "prerequisites": ["c7"],
+    "difficulty": "Advanced",
+    "time": "24h",
+    "instructor": "Jon Auerbach",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c28",
+    "title": "Vue.js - The Complete Guide",
+    "description": "Build reactive user interfaces with Vue 3 and Composition API",
+    "skills": ["Vue.js", "JavaScript", "Frontend"],
+    "prerequisites": ["c13"],
+    "difficulty": "Intermediate",
+    "time": "30h",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c29",
+    "title": "Angular - The Complete Guide",
+    "description": "Master Angular framework for enterprise-level web applications",
+    "skills": ["Angular", "TypeScript", "Frontend"],
+    "prerequisites": ["c13"],
+    "difficulty": "Intermediate",
+    "time": "35h",
+    "instructor": "Maximilian Schwarzmüller",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c30",
+    "title": "Python Backend Development with Django",
+    "description": "Build robust web applications using Django framework",
+    "skills": ["Django", "Python", "Backend"],
+    "prerequisites": ["c1", "c5"],
+    "difficulty": "Intermediate",
+    "time": "32h",
+    "instructor": "Jose Salvatierra",
+    "platform": "Udemy"
+  },
+  {
+    "id": "c31",
+    "title": "Blockchain and Smart Contracts Development",
+    "description": "Learn Ethereum, Solidity, and build decentralized applications",
+    "skills": ["Blockchain", "Solidity", "Smart Contracts"],
+    "prerequisites": ["c1"],
+    "difficulty": "Advanced",
+    "time": "28h",
+    "instructor": "Coursera Official",
+    "platform": "Coursera"
+  },
+  {
+    "id": "c32",
+    "title": "Computer Vision and Image Processing",
+    "description": "Master OpenCV, image processing, and computer vision techniques",
+    "skills": ["Computer Vision", "OpenCV", "Python"],
+    "prerequisites": ["c1", "c9"],
+    "difficulty": "Advanced",
+    "time": "25h",
+    "instructor": "Udemy Team",
+    "platform": "Udemy"
+  }
+]

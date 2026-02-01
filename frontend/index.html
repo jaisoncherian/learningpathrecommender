@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Path Recommender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎓 Learning Path Recommender</h1>
+            <p>AI-powered personalized learning paths</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="recommender">Path Generator</button>
+                <button class="tab-button" data-tab="skill-gap">Skill Gap Analysis</button>
+                <button class="tab-button" data-tab="courses">All Courses</button>
+            </div>
+
+            <!-- Tab 1: Learning Path Recommender -->
+            <section id="recommender" class="tab-content active">
+                <h2>Generate Your Learning Path</h2>
+                <div class="form-group">
+                    <label for="skill-select">Select Target Skill:</label>
+                    <div class="skills-container">
+                        <div class="featured-skills">
+                            <p class="featured-label">Popular Skills:</p>
+                            <div id="featured-skills" class="featured-buttons"></div>
+                        </div>
+                        <select id="skill-select">
+                            <option value="">-- Choose a skill --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="level-select">Your Current Level:</label>
+                    <select id="level-select">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <button id="recommend-btn" class="btn btn-primary">Generate Path</button>
+
+                <!-- Results -->
+                <div id="recommendation-results" class="results hidden">
+                    <h3>Your Learning Path</h3>
+                    <div id="path-stats" class="stats-box"></div>
+                    <div id="path-list" class="course-list"></div>
+                </div>
+
+                <div id="recommendation-error" class="error-message hidden"></div>
+            </section>
+
+            <!-- Tab 2: Skill Gap Analysis -->
+            <section id="skill-gap" class="tab-content">
+                <h2>Analyze Your Skill Gaps</h2>
+                <div class="form-group">
+                    <label for="profile-input">Describe Your Background & Skills:</label>
+                    <textarea id="profile-input" placeholder="E.g., I have 2 years of Python experience, basic HTML/CSS knowledge, and some understanding of databases..."></textarea>
+                </div>
+
+                <button id="analyze-btn" class="btn btn-primary">Analyze Gaps</button>
+
+                <!-- Results -->
+                <div id="gap-results" class="results hidden">
+                    <h3>Skill Gap Analysis</h3>
+                    <div id="coverage-box" class="stats-box"></div>
+                    <div id="mentioned-skills" class="skills-box"></div>
+                    <div id="gaps-list" class="gaps-list"></div>
+                </div>
+
+                <div id="gap-error" class="error-message hidden"></div>
+            </section>
+
+            <!-- Tab 3: All Courses -->
+            <section id="courses" class="tab-content">
+                <h2>Available Courses</h2>
+                <div id="courses-list" class="courses-grid"></div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Learning Path Recommender. All rights reserved.</p>
+        </footer>
+    </div>
+  <main>
+    <section>
+      <label for="skill">Target Skill:</label>
+      <input id="skill" placeholder="e.g. Data Structures">
+      <label for="level">Level:</label>
+      <select id="level"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+      <button id="getPath">Generate Path</button>
+    </section>
+    <section>
+      <h2>Recommended Path</h2>
+      <ol id="path"></ol>
+    </section>
+    <section>
+      <h2>Skill Gap Analyzer</h2>
+      <textarea id="profile" rows="5" placeholder="Paste resume or profile text"></textarea>
+      <button id="analyze">Analyze</button>
+      <ul id="gaps"></ul>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

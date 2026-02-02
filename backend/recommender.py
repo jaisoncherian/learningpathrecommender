@@ -73,7 +73,8 @@ def generate_path(courses, target_skill, level='Beginner'):
                 'difficulty': course.get('difficulty'),
                 'time': course.get('time'),
                 'skills': course.get('skills', []),
-                'prerequisites': course.get('prerequisites', [])
+                'prerequisites': course.get('prerequisites', []),
+                'url': course.get('url', '#')
             })
             seen_ids.add(course_id)
     

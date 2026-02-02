@@ -1,0 +1,76 @@
+{
+    "Data Analyst": {
+        "required_skills": [
+            "Python",
+            "Databases",
+            "SQL",
+            "Data Analysis",
+            "NumPy",
+            "Pandas",
+            "Machine Learning",
+            "Data Visualization",
+            "Statistics"
+        ],
+        "keywords": [
+            "data analyst",
+            "data analysis",
+            "analyst"
+        ]
+    },
+    "Web Developer": {
+        "required_skills": [
+            "Web Development",
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "Frontend",
+            "Backend",
+            "React",
+            "Databases",
+            "REST APIs"
+        ],
+        "keywords": [
+            "web developer",
+            "web dev",
+            "frontend developer",
+            "backend developer",
+            "full stack"
+        ]
+    },
+    "Machine Learning Engineer": {
+        "required_skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "Neural Networks",
+            "TensorFlow",
+            "Data Science",
+            "Mathematics",
+            "Statistics"
+        ],
+        "keywords": [
+            "ml engineer",
+            "machine learning engineer",
+            "ai engineer",
+            "data scientist"
+        ]
+    },
+    "Cloud Engineer": {
+        "required_skills": [
+            "Cloud Computing",
+            "AWS",
+            "DevOps",
+            "Docker",
+            "Kubernetes",
+            "Architecture",
+            "Linux",
+            "Security"
+        ],
+        "keywords": [
+            "cloud engineer",
+            "cloud architect",
+            "devops engineer",
+            "aws engineer"
+        ]
+    }
+}

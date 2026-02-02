@@ -1,10 +1,9 @@
 ﻿const API_BASE_URL = 'http://localhost:5000/api';
 
 // DOM Elements
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
+const tabButtons = document.querySelectorAll('.nav-link');
+const tabPanels = document.querySelectorAll('.tab-panel');
 const skillSelect = document.getElementById('skill-select');
-const levelSelect = document.getElementById('level-select');
 const recommendBtn = document.getElementById('recommend-btn');
 const recommendationResults = document.getElementById('recommendation-results');
 const recommendationError = document.getElementById('recommendation-error');
@@ -14,12 +13,23 @@ const gapResults = document.getElementById('gap-results');
 const gapError = document.getElementById('gap-error');
 const coursesList = document.getElementById('courses-list');
 
+// Level Modal Elements
+const levelModal = document.getElementById('level-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalMessage = document.getElementById('modal-message');
+const modalClose = document.getElementById('modal-close');
+const modalAction = document.getElementById('modal-action');
+
+let currentSuggestedLevel = 'Intermediate';
+let currentTargetSkill = '';
+
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSkills();
     loadCourses();
     setupEventListeners();
+    checkHealth();
 });
 
 // ==================== EVENT LISTENERS ====================
@@ -28,8 +38,8 @@ function setupEventListeners() {
     // Tab switching
     tabButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const tabName = e.target.getAttribute('data-tab');
-            switchTab(tabName);
+            const tabName = e.currentTarget.getAttribute('data-tab');
+            switchTab(tabName, e.currentTarget);
         });
     });
 
@@ -38,15 +48,40 @@ function setupEventListeners() {
 
     // Skill Gap Analysis
     analyzeBtn.addEventListener('click', analyzeSkillGap);
+
+    // Modal Events
+    modalClose.addEventListener('click', hideModal);
+    modalAction.addEventListener('click', handleModalAction);
 }
 
-function switchTab(tabName) {
+function showModal(title, message, actionText, suggestedLevel) {
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modalAction.textContent = actionText;
+    currentSuggestedLevel = suggestedLevel;
+    levelModal.classList.remove('hidden');
+}
+
+function hideModal() {
+    levelModal.classList.add('hidden');
+}
+
+function handleModalAction() {
+    hideModal();
+    const radioToSelect = document.querySelector(`input[name="level"][value="${currentSuggestedLevel}"]`);
+    if (radioToSelect) {
+        radioToSelect.checked = true;
+        generateRecommendation();
+    }
+}
+
+function switchTab(tabName, clickedButton) {
     // Update tab buttons
     tabButtons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    clickedButton.classList.add('active');
 
-    // Update tab contents
-    tabContents.forEach(content => content.classList.remove('active'));
+    // Update tab panels
+    tabPanels.forEach(panel => panel.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
 }
 
@@ -81,40 +116,18 @@ async function apiCall(endpoint, method = 'GET', body = null) {
 
 // ==================== SKILLS LOADING ====================
 
-// Featured/Popular skills to highlight
 const FEATURED_SKILLS = [
-    'Python',
-    'JavaScript',
-    'React',
-    'Web Development',
-    'Machine Learning',
-    'AWS',
-    'Docker',
-    'Node.js',
-    'Data Science',
-    'Angular',
-    'Databases',
-    'Cloud Computing',
-    'TypeScript',
-    'Vue.js',
-    'Deep Learning',
-    'TensorFlow',
-    'Kubernetes',
-    'Java',
-    'C++',
-    'SQL',
-    'MongoDB',
-    'Git',
-    'REST APIs',
-    'DevOps',
-    'Blockchain',
-    'Cybersecurity'
+    'Python', 'JavaScript', 'React', 'Web Development',
+    'Machine Learning', 'AWS', 'Docker', 'Node.js'
 ];
 
 async function loadSkills() {
     try {
         const response = await apiCall('/skills');
         const skills = response.skills;
+
+        // Update header stat
+        document.getElementById('total-skills-stat').textContent = skills.length;
 
         // Separate featured and other skills
         const featured = skills.filter(s => FEATURED_SKILLS.includes(s)).sort();
@@ -123,11 +136,17 @@ async function loadSkills() {
         // Populate featured skills buttons
         const featuredContainer = document.getElementById('featured-skills');
         if (featuredContainer) {
+            featuredContainer.innerHTML = '';
             featured.forEach(skill => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'featured-skill-btn';
-                btn.textContent = skill;
+
+                // Add specific class for unique designs
+                const skillLower = skill.toLowerCase().replace(/\s+/g, '-');
+                btn.classList.add(`skill-${skillLower}`);
+
+                btn.innerHTML = `<span>${escapeHtml(skill)}</span>`;
                 btn.addEventListener('click', () => {
                     skillSelect.value = skill;
                     generateRecommendation();
@@ -138,8 +157,7 @@ async function loadSkills() {
 
         // Populate skill select dropdown
         skillSelect.innerHTML = '<option value="">-- Choose a skill --</option>';
-        
-        // Add featured skills with group label
+
         if (featured.length > 0) {
             const featuredGroup = document.createElement('optgroup');
             featuredGroup.label = '⭐ Popular Skills';
@@ -152,7 +170,6 @@ async function loadSkills() {
             skillSelect.appendChild(featuredGroup);
         }
 
-        // Add other skills with group label
         if (others.length > 0) {
             const othersGroup = document.createElement('optgroup');
             othersGroup.label = 'All Other Skills';
@@ -176,6 +193,9 @@ async function loadCourses() {
         const response = await apiCall('/courses');
         const courses = response.data;
 
+        // Update header stat
+        document.getElementById('total-courses-stat').textContent = courses.length;
+
         coursesList.innerHTML = '';
         courses.forEach(course => {
             const courseCard = createCourseGridCard(course);
@@ -188,21 +208,22 @@ async function loadCourses() {
 
 function createCourseGridCard(course) {
     const card = document.createElement('div');
-    card.className = 'course-grid-card';
+    card.className = 'catalog-card';
 
-    const difficultyClass = `badge-difficulty-${course.difficulty.toLowerCase()}`;
+    const difficultyClass = `diff-${course.difficulty.toLowerCase()}`;
 
     card.innerHTML = `
-        <div class="course-grid-header">
-            <div class="course-grid-title">${escapeHtml(course.title)}</div>
-            <div class="badge ${difficultyClass}">${course.difficulty}</div>
+        <div class="course-header">
+            <h4 class="course-title" style="margin:0">${escapeHtml(course.title)}</h4>
+            <div class="badge-tag ${difficultyClass}">${course.difficulty}</div>
         </div>
-        <div class="course-grid-body">
-            <div class="course-grid-description">${escapeHtml(course.description || '')}</div>
-            <div class="course-grid-time">⏱️ ${course.time}</div>
-            <div class="course-grid-skills">
-                ${course.skills.map(skill => `<span class="course-skill-tag">${escapeHtml(skill)}</span>`).join('')}
+        <div class="course-body">
+            ${course.description ? `<p class="course-desc" style="color:var(--text-muted); font-size:0.95rem; margin: 1rem 0;">${escapeHtml(course.description)}</p>` : ''}
+            <div class="course-metadata" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom: 1.5rem;">
+                <span class="badge-tag diff-intermediate">⏱️ ${course.time}</span>
+                ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-light); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
             </div>
+            <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary full-width" style="padding: 0.75rem; font-size: 0.9rem; border-radius: 8px;">Explore Course ↗</a>
         </div>
     `;
 
@@ -213,7 +234,8 @@ function createCourseGridCard(course) {
 
 async function generateRecommendation() {
     const skill = skillSelect.value.trim();
-    const level = levelSelect.value;
+    const levelRadio = document.querySelector('input[name="level"]:checked');
+    const level = levelRadio ? levelRadio.value : 'Beginner';
 
     if (!skill) {
         showError(recommendationError, 'Please select a skill');
@@ -222,7 +244,10 @@ async function generateRecommendation() {
 
     try {
         recommendBtn.disabled = true;
-        recommendBtn.textContent = 'Generating...';
+        recommendBtn.innerHTML = `
+            <span class="spinner"></span>
+            <span class="btn-text">Generating...</span>
+        `;
         recommendationError.classList.add('hidden');
 
         const response = await apiCall('/recommend', 'POST', {
@@ -231,7 +256,31 @@ async function generateRecommendation() {
         });
 
         if (response.path.length === 0) {
-            showError(recommendationError, `No courses found for "${skill}" at ${level} level`);
+            // Check if skill exists at other levels
+            try {
+                const skillsResponse = await apiCall(`/courses/by-skill/${encodeURIComponent(skill)}`);
+                const courses = skillsResponse.courses || [];
+
+                if (courses.length > 0) {
+                    // Skill exists but at different levels
+                    const levels = [...new Set(courses.map(c => c.difficulty))];
+                    let suggestion = 'Intermediate';
+                    if (levels.includes('Intermediate')) suggestion = 'Intermediate';
+                    else if (levels.includes('Advanced')) suggestion = 'Advanced';
+                    else if (levels.includes('Beginner')) suggestion = 'Beginner'; // Should not happen if path was 0
+
+                    showModal(
+                        'Advanced Skill Detected',
+                        `"${skill}" is a professional-grade skill. We found courses available for ${suggestion} level. Would you like to switch?`,
+                        `Switch to ${suggestion}`,
+                        suggestion
+                    );
+                } else {
+                    showError(recommendationError, `No courses found for "${skill}"`);
+                }
+            } catch (e) {
+                showError(recommendationError, `No courses found for "${skill}" at ${level} level`);
+            }
             recommendationResults.classList.add('hidden');
         } else {
             displayRecommendationPath(response);
@@ -242,7 +291,13 @@ async function generateRecommendation() {
         recommendationResults.classList.add('hidden');
     } finally {
         recommendBtn.disabled = false;
-        recommendBtn.textContent = 'Generate Path';
+        recommendBtn.innerHTML = `
+            <span class="btn-text">Generate Learning Path</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
     }
 }
 
@@ -251,38 +306,36 @@ function displayRecommendationPath(data) {
 
     // Display stats
     const statsHtml = `
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-value">${stats.total_courses}</div>
-                <div class="stat-label">Courses</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">${stats.total_time}</div>
-                <div class="stat-label">Total Time</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">${stats.average_difficulty}</div>
-                <div class="stat-label">Avg Difficulty</div>
-            </div>
+        <div class="stat-box">
+            <span class="stat-num">${stats.total_courses}</span>
+            <span class="stat-desc">Modules</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-num">${stats.total_time}</span>
+            <span class="stat-desc">Duration</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-num">${stats.average_difficulty}</span>
+            <span class="stat-desc">Level</span>
         </div>
     `;
     document.getElementById('path-stats').innerHTML = statsHtml;
 
     // Display courses
     const pathHtml = path.map((course, index) => `
-        <div class="course-card">
-            <div class="course-header">
-                <div>
-                    <div class="course-title">${index + 1}. ${escapeHtml(course.title)}</div>
-                    <div class="course-meta">
-                        <span class="badge badge-difficulty-${course.difficulty.toLowerCase()}">${course.difficulty}</span>
-                        <span>⏱️ ${course.time}</span>
-                    </div>
+        <div class="path-card">
+            <div class="step-marker">${index + 1}</div>
+            <div class="path-info">
+                <h4>${escapeHtml(course.title)}</h4>
+                <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:1rem;">
+                    <span class="badge-tag diff-${course.difficulty.toLowerCase()}">${course.difficulty}</span>
+                    <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">⏱️ ${course.time}</span>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-light); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
                 </div>
             </div>
-            <div class="course-skills">
-                ${course.skills.map(skill => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join('')}
-            </div>
+            <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.9rem; align-self: center; border-radius: 8px;">Start Module ↗</a>
         </div>
     `).join('');
 
@@ -301,7 +354,10 @@ async function analyzeSkillGap() {
 
     try {
         analyzeBtn.disabled = true;
-        analyzeBtn.textContent = 'Analyzing...';
+        analyzeBtn.innerHTML = `
+            <span class="spinner"></span>
+            <span class="btn-text">Analyzing...</span>
+        `;
         gapError.classList.add('hidden');
 
         const response = await apiCall('/skill-gap', 'POST', {
@@ -315,41 +371,63 @@ async function analyzeSkillGap() {
         gapResults.classList.add('hidden');
     } finally {
         analyzeBtn.disabled = false;
-        analyzeBtn.textContent = 'Analyze Gaps';
+        analyzeBtn.innerHTML = `
+            <span class="btn-text">Analyze Skill Gaps</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M21 21L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
     }
 }
 
 function displaySkillGapAnalysis(data) {
-    const { mentioned_skills, gaps, skill_coverage_percentage, total_skills_available } = data;
+    const { mentioned_skills, gaps, coverage, total_skills_available, detected_goal, roadmap } = data;
 
     // Coverage Box
     const coverageHtml = `
         <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-value">${skill_coverage_percentage}%</div>
-                <div class="stat-label">Skill Coverage</div>
+            <div class="stat-box">
+                <span class="stat-num">${coverage}%</span>
+                <span class="stat-desc">Market Alignment</span>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">${mentioned_skills.length}</div>
-                <div class="stat-label">Skills Known</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">${gaps.length}</div>
-                <div class="stat-label">Gaps Found</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">${total_skills_available}</div>
-                <div class="stat-label">Available Skills</div>
+            <div class="stat-box">
+                <span class="stat-num">${total_skills_available}</span>
+                <span class="stat-desc">Growth Vectors</span>
             </div>
         </div>
     `;
     document.getElementById('coverage-box').innerHTML = coverageHtml;
 
+    // Roadmap Header
+    const resultsContainer = document.getElementById('gap-results');
+    const roadmapHeader = resultsContainer.querySelector('.roadmap-info');
+    if (roadmapHeader) roadmapHeader.remove();
+
+    if (detected_goal) {
+        const roadmapDiv = document.createElement('div');
+        roadmapDiv.className = 'roadmap-info glass-card';
+        roadmapDiv.innerHTML = `
+            <div class="roadmap-meta">
+                <span class="roadmap-tag">Targeting: ${detected_goal}</span>
+                <h3>Career Roadmap Detected 🎯</h3>
+                <p>We've tailored your analysis to help you become a <strong>${detected_goal}</strong>.</p>
+            </div>
+            <div class="roadmap-requirements">
+                <small>Core Requirements:</small>
+                <div class="requirement-tags">
+                    ${roadmap.required_skills.map(s => `<span class="req-tag">${s}</span>`).join('')}
+                </div>
+            </div>
+        `;
+        resultsContainer.insertBefore(roadmapDiv, document.getElementById('coverage-box'));
+    }
+
     // Mentioned Skills
     if (mentioned_skills.length > 0) {
         const skillsHtml = `
-            <h4>✓ Skills You Know</h4>
-            <div class="skill-list">
+            <h5 class="config-label">✓ Skills Successfully Identified</h5>
+            <div class="requirement-tags" style="margin-bottom: 2rem;">
                 ${mentioned_skills.map(skill => `<span class="skill-badge">${escapeHtml(skill)}</span>`).join('')}
             </div>
         `;
@@ -360,19 +438,23 @@ function displaySkillGapAnalysis(data) {
 
     // Gaps
     const gapsHtml = gaps.map(gap => `
-        <div class="gap-card">
-            <div>
-                <div class="gap-skill">
-                    ${escapeHtml(gap.skill)}
-                    <span class="gap-count">${gap.count} courses</span>
+        <div class="path-card" style="flex-direction: column; gap:1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <h4 style="margin:0">${escapeHtml(gap.skill)}</h4>
+                    ${gap.is_priority ? '<span class="badge-tag diff-intermediate" style="background:var(--primary-glow)">Target Mastery</span>' : ''}
                 </div>
+                <span style="color:var(--text-muted); font-weight:600; font-size:0.9rem;">${gap.count} Professional Resources</span>
             </div>
-            <div class="gap-examples">
-                <h5>Example courses:</h5>
+            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 12px;">
+                <h5 class="label-title">Recommended Start Points</h5>
                 ${gap.examples.map(example => `
-                    <div class="example-item">
-                        • <strong>${escapeHtml(example.title)}</strong>
-                        <span class="badge badge-difficulty-${example.difficulty.toLowerCase()}">${example.difficulty}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-top: 1px solid var(--border);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <strong style="font-size:0.95rem;">• ${escapeHtml(example.title)}</strong>
+                            <span class="badge-tag diff-${example.difficulty.toLowerCase()}">${example.difficulty}</span>
+                        </div>
+                        <a href="${example.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.75rem; border-radius: 6px;">View ↗</a>
                     </div>
                 `).join('')}
             </div>
@@ -405,5 +487,3 @@ async function checkHealth() {
         console.warn('Make sure the Flask backend is running on http://localhost:5000');
     }
 }
-
-checkHealth();

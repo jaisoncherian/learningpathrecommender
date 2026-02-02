@@ -153,16 +153,20 @@ def skill_gap():
                 'error': 'Profile text is required'
             }), 400
         
-        gaps = analyze_profile(COURSES, profile_text)
-        mentioned = get_mentioned_skills(COURSES, profile_text)
+        # Analyze profile
+        analysis_result = analyze_profile(COURSES, profile_text)
+        gaps = analysis_result['gaps']
+        mentioned_skills = get_mentioned_skills(COURSES, profile_text)
         coverage = calculate_skill_coverage(COURSES, profile_text)
         
         return jsonify({
             'success': True,
             'gaps': gaps,
-            'mentioned_skills': mentioned,
-            'skill_coverage_percentage': coverage,
-            'total_skills_available': len(get_all_skills(COURSES))
+            'mentioned_skills': mentioned_skills,
+            'coverage': coverage,
+            'total_skills_available': len(get_all_skills(COURSES)),
+            'detected_goal': analysis_result.get('detected_goal'),
+            'roadmap': analysis_result.get('roadmap')
         }), 200
     
     except Exception as e:

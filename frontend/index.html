@@ -1,117 +1,187 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning Path Recommender</title>
+    <title>AI Learning Path Recommender | Personalized Education</title>
+    <meta name="description"
+        content="AI-powered personalized learning paths with skill gap detection and prerequisite logic">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>🎓 Learning Path Recommender</h1>
-            <p>AI-powered personalized learning paths</p>
+    <div class="site-wrapper">
+        <!-- Top Navigation -->
+        <header class="navbar">
+            <div class="main-container nav-content">
+                <a href="#" class="brand">
+                    <div class="brand-icon"
+                        style="background: linear-gradient(135deg, var(--primary), var(--primary-dark))">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                        </svg>
+                    </div>
+                    <h3>Path Pilot</h3>
+                </a>
+                <nav class="nav-links">
+                    <a href="#recommender" class="nav-link active" data-tab="recommender">Mission Control</a>
+                    <a href="#skill-gap" class="nav-link" data-tab="skill-gap">Skill Radar</a>
+                    <a href="#courses" class="nav-link" data-tab="courses">All Routes</a>
+                </nav>
+            </div>
         </header>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <!-- Tab Navigation -->
-            <div class="tabs">
-                <button class="tab-button active" data-tab="recommender">Path Generator</button>
-                <button class="tab-button" data-tab="skill-gap">Skill Gap Analysis</button>
-                <button class="tab-button" data-tab="courses">All Courses</button>
-            </div>
-
-            <!-- Tab 1: Learning Path Recommender -->
-            <section id="recommender" class="tab-content active">
-                <h2>Generate Your Learning Path</h2>
-                <div class="form-group">
-                    <label for="skill-select">Select Target Skill:</label>
-                    <div class="skills-container">
-                        <div class="featured-skills">
-                            <p class="featured-label">Popular Skills:</p>
-                            <div id="featured-skills" class="featured-buttons"></div>
-                        </div>
-                        <select id="skill-select">
-                            <option value="">-- Choose a skill --</option>
-                        </select>
+        <main class="main-container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Navigate your career with <span
+                        style="background: linear-gradient(to right, var(--primary), #818cf8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Surgical
+                        Precision.</span></h1>
+                <p>Path Pilot is your professional navigator—mapping high-impact learning routes, benchmarking your
+                    skills, and steering you toward mastery.</p>
+                <div class="header-stats"
+                    style="display: flex; justify-content: center; gap: 3rem; margin-top: 3.5rem;">
+                    <div class="text-center"
+                        style="background: white; padding: 1rem 2rem; border-radius: 16px; box-shadow: var(--shadow-sm);">
+                        <span id="total-courses-stat"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--primary)">32</span>
+                        <div
+                            style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em">
+                            Vetted Routes</div>
+                    </div>
+                    <div class="text-center"
+                        style="background: white; padding: 1rem 2rem; border-radius: 16px; box-shadow: var(--shadow-sm);">
+                        <span id="total-skills-stat"
+                            style="font-size: 1.75rem; font-weight: 800; color: var(--primary)">26</span>
+                        <div
+                            style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em">
+                            Expert Skills</div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="level-select">Your Current Level:</label>
-                    <select id="level-select">
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                    </select>
-                </div>
-
-                <button id="recommend-btn" class="btn btn-primary">Generate Path</button>
-
-                <!-- Results -->
-                <div id="recommendation-results" class="results hidden">
-                    <h3>Your Learning Path</h3>
-                    <div id="path-stats" class="stats-box"></div>
-                    <div id="path-list" class="course-list"></div>
-                </div>
-
-                <div id="recommendation-error" class="error-message hidden"></div>
             </section>
 
-            <!-- Tab 2: Skill Gap Analysis -->
-            <section id="skill-gap" class="tab-content">
-                <h2>Analyze Your Skill Gaps</h2>
-                <div class="form-group">
-                    <label for="profile-input">Describe Your Background & Skills:</label>
-                    <textarea id="profile-input" placeholder="E.g., I have 2 years of Python experience, basic HTML/CSS knowledge, and some understanding of databases..."></textarea>
+            <!-- Feature: Path Generator -->
+            <section id="recommender" class="tab-panel active section">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="card-glass" style="margin-bottom: 3rem;">
+                        <h2 style="margin-bottom: 2rem;">Build Your Curriculum</h2>
+
+                        <div class="form-group">
+                            <label class="label-title">Choose Your Target Mastery</label>
+                            <div class="pills-container" id="featured-skills" style="margin-bottom: 1.5rem;"></div>
+                            <select id="skill-select" class="input-premium">
+                                <option value="">Or select from all skills...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="label-title">Current Proficiency Level</label>
+                            <div class="pills-container">
+                                <div class="pill-item">
+                                    <input type="radio" id="level-beginner" name="level" value="Beginner" checked>
+                                    <label for="level-beginner">Beginner</label>
+                                </div>
+                                <div class="pill-item">
+                                    <input type="radio" id="level-intermediate" name="level" value="Intermediate">
+                                    <label for="level-intermediate">Intermediate</label>
+                                </div>
+                                <div class="pill-item">
+                                    <input type="radio" id="level-advanced" name="level" value="Advanced">
+                                    <label for="level-advanced">Advanced</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="recommend-btn" class="btn-primary full-width" style="margin-top: 1rem;">
+                            <span>Generate Learning Pathway</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div id="recommendation-results" class="hidden">
+                        <div class="results-header">
+                            <h3 style="margin:0">Your Strategic Roadmap</h3>
+                            <div id="path-stats" class="stats-grid" style="margin:0"></div>
+                        </div>
+                        <div id="path-list" class="timeline-path"></div>
+                    </div>
+                    <div id="recommendation-error" class="alert-box error hidden"></div>
                 </div>
-
-                <button id="analyze-btn" class="btn btn-primary">Analyze Gaps</button>
-
-                <!-- Results -->
-                <div id="gap-results" class="results hidden">
-                    <h3>Skill Gap Analysis</h3>
-                    <div id="coverage-box" class="stats-box"></div>
-                    <div id="mentioned-skills" class="skills-box"></div>
-                    <div id="gaps-list" class="gaps-list"></div>
-                </div>
-
-                <div id="gap-error" class="error-message hidden"></div>
             </section>
 
-            <!-- Tab 3: All Courses -->
-            <section id="courses" class="tab-content">
-                <h2>Available Courses</h2>
-                <div id="courses-list" class="courses-grid"></div>
+            <!-- Feature: Skill Gap -->
+            <section id="skill-gap" class="tab-panel section">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="card-glass" style="margin-bottom: 3rem;">
+                        <h2 style="margin-bottom: 1rem;">Skill Benchmark Analysis</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">Describe your current background and
+                            your dream role to see where you stand.</p>
+
+                        <div class="form-group">
+                            <textarea id="profile-input" class="input-premium textarea-premium"
+                                placeholder="E.g., I'm a Python developer with 2 years of experience. I want to transition into Artificial Intelligence..."></textarea>
+                        </div>
+
+                        <button id="analyze-btn" class="btn-primary full-width">
+                            <span>Analyze Expertise Gap</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M21 21l-6-6M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div id="gap-results" class="hidden">
+                        <div id="coverage-box" style="margin-bottom: 2rem;"></div>
+                        <div id="mentioned-skills"></div>
+                        <div id="gaps-list" class="section-grid"></div>
+                    </div>
+                    <div id="gap-error" class="alert-box error hidden"></div>
+                </div>
+            </section>
+
+            <!-- Feature: Catalog -->
+            <section id="courses" class="tab-panel section">
+                <h2 style="margin-bottom: 3rem; text-align: center;">Vetted Course Catalog</h2>
+                <div id="courses-list" class="catalog-grid"></div>
             </section>
         </main>
 
         <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2026 Learning Path Recommender. All rights reserved.</p>
+        <footer style="padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 6rem;">
+            <div class="main-container text-center">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 Path AI Technologies. All rights
+                    reserved.</p>
+            </div>
         </footer>
     </div>
-  <main>
-    <section>
-      <label for="skill">Target Skill:</label>
-      <input id="skill" placeholder="e.g. Data Structures">
-      <label for="level">Level:</label>
-      <select id="level"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
-      <button id="getPath">Generate Path</button>
-    </section>
-    <section>
-      <h2>Recommended Path</h2>
-      <ol id="path"></ol>
-    </section>
-    <section>
-      <h2>Skill Gap Analyzer</h2>
-      <textarea id="profile" rows="5" placeholder="Paste resume or profile text"></textarea>
-      <button id="analyze">Analyze</button>
-      <ul id="gaps"></ul>
-    </section>
-  </main>
-  <script src="script.js"></script>
+
+    <!-- Modals -->
+    <div id="level-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-icon">🎯</div>
+            <h3 id="modal-title" style="margin-bottom: 1rem;">Switching to Optimal Level</h3>
+            <p id="modal-message" style="color: var(--text-muted)"></p>
+            <div class="modal-footer">
+                <button id="modal-close" class="btn-primary btn-ghost full-width" style="border-radius: 8px;">Stay
+                    Here</button>
+                <button id="modal-action" class="btn-primary full-width" style="border-radius: 8px;">Apply &
+                    Sync</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>

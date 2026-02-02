@@ -22,6 +22,7 @@ const modalAction = document.getElementById('modal-action');
 
 let currentSuggestedLevel = 'Intermediate';
 let currentTargetSkill = '';
+let allCoursesList = []; // Store full list for searching
 
 // ==================== INITIALIZATION ====================
 
@@ -48,6 +49,14 @@ function setupEventListeners() {
 
     // Skill Gap Analysis
     analyzeBtn.addEventListener('click', analyzeSkillGap);
+
+    // Catalog Search
+    const catalogSearchInput = document.getElementById('catalog-search');
+    if (catalogSearchInput) {
+        catalogSearchInput.addEventListener('input', (e) => {
+            filterCourses(e.target.value.toLowerCase());
+        });
+    }
 
     // Modal Events
     modalClose.addEventListener('click', hideModal);
@@ -149,7 +158,7 @@ async function loadSkills() {
                 btn.innerHTML = `<span>${escapeHtml(skill)}</span>`;
                 btn.addEventListener('click', () => {
                     skillSelect.value = skill;
-                    generateRecommendation();
+                    // Removed automatic generation to ensure user clicks the primary button
                 });
                 featuredContainer.appendChild(btn);
             });
@@ -191,19 +200,48 @@ async function loadSkills() {
 async function loadCourses() {
     try {
         const response = await apiCall('/courses');
-        const courses = response.data;
+        allCoursesList = response.data;
 
         // Update header stat
-        document.getElementById('total-courses-stat').textContent = courses.length;
+        document.getElementById('total-courses-stat').textContent = allCoursesList.length;
 
-        coursesList.innerHTML = '';
-        courses.forEach(course => {
-            const courseCard = createCourseGridCard(course);
-            coursesList.appendChild(courseCard);
-        });
+        renderCourseCatalog(allCoursesList);
     } catch (error) {
         console.error('Failed to load courses:', error);
     }
+}
+
+function filterCourses(searchTerm) {
+    const filtered = allCoursesList.filter(course => {
+        const titleMatch = course.title.toLowerCase().includes(searchTerm);
+        const descMatch = (course.description || '').toLowerCase().includes(searchTerm);
+        const skillMatch = course.skills.some(s => s.toLowerCase().includes(searchTerm));
+        const diffMatch = course.difficulty.toLowerCase().includes(searchTerm);
+
+        return titleMatch || descMatch || skillMatch || diffMatch;
+    });
+
+    renderCourseCatalog(filtered);
+}
+
+function renderCourseCatalog(courses) {
+    coursesList.innerHTML = '';
+
+    if (courses.length === 0) {
+        coursesList.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem 2rem; border: 2px dashed var(--border); border-radius: var(--radius-lg); color: var(--text-muted); background: var(--bg-darker);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🛰️</div>
+                <h3>No coordinates matches.</h3>
+                <p>Try searching for a different skill or pilot expertise level.</p>
+            </div>
+        `;
+        return;
+    }
+
+    courses.forEach(course => {
+        const courseCard = createCourseGridCard(course);
+        coursesList.appendChild(courseCard);
+    });
 }
 
 function createCourseGridCard(course) {
@@ -221,7 +259,7 @@ function createCourseGridCard(course) {
             ${course.description ? `<p class="course-desc" style="color:var(--text-muted); font-size:0.95rem; margin: 1rem 0;">${escapeHtml(course.description)}</p>` : ''}
             <div class="course-metadata" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom: 1.5rem;">
                 <span class="badge-tag diff-intermediate">⏱️ ${course.time}</span>
-                ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-light); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
+                ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-darker); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
             </div>
             <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary full-width" style="padding: 0.75rem; font-size: 0.9rem; border-radius: 8px;">Explore Course ↗</a>
         </div>
@@ -332,7 +370,7 @@ function displayRecommendationPath(data) {
                     <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">⏱️ ${course.time}</span>
                 </div>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-light); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
+                    ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-darker); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
                 </div>
             </div>
             <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.9rem; align-self: center; border-radius: 8px;">Start Module ↗</a>
@@ -446,7 +484,7 @@ function displaySkillGapAnalysis(data) {
                 </div>
                 <span style="color:var(--text-muted); font-weight:600; font-size:0.9rem;">${gap.count} Professional Resources</span>
             </div>
-            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 12px;">
+            <div style="background: var(--bg-darker); padding: 1.5rem; border-radius: 12px;">
                 <h5 class="label-title">Recommended Start Points</h5>
                 ${gap.examples.map(example => `
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-top: 1px solid var(--border);">

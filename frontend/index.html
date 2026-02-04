@@ -13,6 +13,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Vis.js for Interactive Graph -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 
 <body>
@@ -38,7 +40,19 @@
                     <a href="#recommender" class="nav-link active" data-tab="recommender">Mission Control</a>
                     <a href="#skill-gap" class="nav-link" data-tab="skill-gap">Skill Radar</a>
                     <a href="#courses" class="nav-link" data-tab="courses">All Routes</a>
+                    <a href="#progress" class="nav-link" data-tab="progress">📊 Progress <span
+                            class="badge-tag diff-beginner"
+                            style="font-size: 0.6rem; padding: 0.1rem 0.35rem;">NEW</span></a>
                 </nav>
+                <div class="user-progress-header" id="header-progress">
+                    <div class="xp-display">
+                        <span class="level-badge" id="header-level">Lvl 1</span>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar" id="header-xp-bar" style="width: 0%"></div>
+                        </div>
+                        <span class="xp-text" id="header-xp">0 XP</span>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -115,9 +129,26 @@
                     <div id="recommendation-results" class="hidden">
                         <div class="results-header">
                             <h3 style="margin:0">Your Strategic Roadmap</h3>
+                            <div class="view-toggles" style="display: flex; gap: 0.5rem;">
+                                <button class="btn-secondary btn-small active" id="view-list-btn">List View</button>
+                                <button class="btn-secondary btn-small" id="view-graph-btn">Visual Map</button>
+                            </div>
                             <div id="path-stats" class="stats-grid" style="margin:0"></div>
                         </div>
                         <div id="path-list" class="timeline-path"></div>
+                        <div id="path-visualizer" class="hidden glass-card"
+                            style="height: 500px; margin-top: 2rem; padding: 0;"></div>
+
+                        <div class="gamification-tip card-glass"
+                            style="margin-top: 2rem; border-left: 4px solid var(--primary); padding: 1rem;">
+                            <p style="font-size: 0.9rem; margin: 0;"><strong>💡 Level Up Tip:</strong> Complete these
+                                courses and take skills quizzes to earn <strong>XP</strong> and unlock
+                                <strong>Achievements</strong> on your <a href="#progress"
+                                    onclick="document.querySelector('[data-tab=progress]').click()"
+                                    style="color: var(--primary); font-weight: 700; text-decoration: none;">📊 Progress
+                                    Dashboard</a>!
+                            </p>
+                        </div>
                     </div>
                     <div id="recommendation-error" class="alert-box error hidden"></div>
                 </div>
@@ -173,6 +204,54 @@
 
                 <div id="courses-list" class="catalog-grid"></div>
             </section>
+
+            <!-- Feature: Progress Dashboard -->
+            <section id="progress" class="tab-panel section">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Your Progress Dashboard</h2>
+
+                <div class="progress-overview">
+                    <div class="glass-card" style="padding: 2rem; margin-bottom: 2rem;">
+                        <div class="level-display">
+                            <div class="level-circle" id="level-circle">
+                                <span class="level-number" id="current-level">1</span>
+                            </div>
+                            <div class="level-info">
+                                <h3 id="level-title">Novice</h3>
+                                <div class="xp-progress">
+                                    <div class="xp-bar-large">
+                                        <div class="xp-fill" id="xp-fill" style="width: 0%"></div>
+                                    </div>
+                                    <p class="xp-label" id="xp-label">0 / 100 XP</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid" style="margin-bottom: 3rem;">
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-courses">0</span>
+                            <span class="stat-desc">Courses Completed</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-quizzes">0</span>
+                            <span class="stat-desc">Quizzes Passed</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-streak">0</span>
+                            <span class="stat-desc">Day Streak 🔥</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-skills">0</span>
+                            <span class="stat-desc">Skills Learned</span>
+                        </div>
+                    </div>
+
+                    <div class="achievements-section">
+                        <h3 style="margin-bottom: 1.5rem;">Achievements</h3>
+                        <div id="achievements-grid" class="achievements-grid"></div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Footer -->
@@ -185,6 +264,21 @@
     </div>
 
     <!-- Modals -->
+    <!-- Level Up Modal -->
+    <div id="level-up-modal" class="modal-overlay hidden level-up-notification-overlay">
+        <div class="main-container">
+            <div class="modal-content celebration-modal horizontal-celebration">
+                <div class="celebration-icon">🎉</div>
+                <div class="celebration-text">
+                    <h2 class="grotesk-title">Level Up!</h2>
+                    <p><span id="level-up-title">Novice</span> &bull; Lvl <span id="level-up-badge">2</span></p>
+                </div>
+                <button class="btn-primary btn-small" onclick="hideLevelUpModal()"
+                    style="margin-left: auto; width: auto; padding: 0.5rem 1.25rem;">Awesome!</button>
+            </div>
+        </div>
+    </div>
+
     <div id="level-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="modal-icon">🎯</div>
@@ -199,6 +293,35 @@
         </div>
     </div>
 
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="modal-overlay hidden">
+        <div class="modal-content quiz-modal-content">
+            <button class="modal-close-btn" id="quiz-close">✕</button>
+            <div id="quiz-container">
+                <div class="quiz-header">
+                    <h3 id="quiz-title">Quiz</h3>
+                    <span class="quiz-progress" id="quiz-progress">Question 1 of 5</span>
+                </div>
+                <div id="quiz-body" class="quiz-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="achievement-notification" class="achievement-notification hidden">
+        <div class="achievement-content">
+            <div class="achievement-icon" id="achievement-icon">🏆</div>
+            <div class="achievement-text">
+                <h4 id="achievement-name">Achievement Unlocked!</h4>
+                <p id="achievement-desc">Description</p>
+                <span class="achievement-xp" id="achievement-xp">+50 XP</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="progress_storage.js"></script>
+    <script src="quiz_progress.js"></script>
+    <script src="visualizer.js"></script>
     <script src="script.js"></script>
 </body>
 

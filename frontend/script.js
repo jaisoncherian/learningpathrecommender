@@ -1,4 +1,4 @@
-﻿const API_BASE_URL = 'http://localhost:5000/api';
+﻿// API_BASE_URL is now global from config.js
 
 // DOM Elements
 const tabButtons = document.querySelectorAll('.nav-link');
@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCourses();
     setupEventListeners();
     checkHealth();
+
+    // Initialize progress tracking
+    if (typeof updateProgressDisplay === 'function') {
+        updateProgressDisplay();
+    }
 });
 
 // ==================== EVENT LISTENERS ====================
@@ -61,6 +66,12 @@ function setupEventListeners() {
     // Modal Events
     modalClose.addEventListener('click', hideModal);
     modalAction.addEventListener('click', handleModalAction);
+
+    // Quiz Modal Events
+    const quizCloseBtn = document.getElementById('quiz-close');
+    if (quizCloseBtn && typeof hideQuizModal === 'function') {
+        quizCloseBtn.addEventListener('click', hideQuizModal);
+    }
 }
 
 function showModal(title, message, actionText, suggestedLevel) {
@@ -96,32 +107,7 @@ function switchTab(tabName, clickedButton) {
 
 // ==================== API CALLS ====================
 
-async function apiCall(endpoint, method = 'GET', body = null) {
-    try {
-        const options = {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        };
-
-        if (body) {
-            options.body = JSON.stringify(body);
-        }
-
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'API Error');
-        }
-
-        return data;
-    } catch (error) {
-        console.error('API Error:', error);
-        throw error;
-    }
-}
+// apiCall is now global from config.js
 
 // ==================== SKILLS LOADING ====================
 
@@ -261,7 +247,11 @@ function createCourseGridCard(course) {
                 <span class="badge-tag diff-intermediate">⏱️ ${course.time}</span>
                 ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-darker); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
             </div>
-            <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary full-width" style="padding: 0.75rem; font-size: 0.9rem; border-radius: 8px;">Explore Course ↗</a>
+            <div class="course-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="flex: 1; padding: 0.75rem; font-size: 0.9rem; border-radius: 8px; min-width: 100px; text-align: center;">Explore ↗</a>
+                <button class="btn-secondary btn-small" onclick="startQuiz(${JSON.stringify(course.skills).replace(/"/g, '&quot;')}, '${course.difficulty}')" style="padding: 0.75rem 1rem; font-size: 0.85rem;">📝 Quiz</button>
+                <button class="btn-success btn-small" onclick="markCourseComplete('${course.id}', '${escapeHtml(course.title)}', '${course.difficulty}', ${JSON.stringify(course.skills)})" style="padding: 0.75rem 1rem; font-size: 0.85rem;">✓ Done</button>
+            </div>
         </div>
     `;
 
@@ -378,6 +368,24 @@ function displayRecommendationPath(data) {
     `).join('');
 
     document.getElementById('path-list').innerHTML = pathHtml;
+
+    // Render interactive graph
+    if (typeof renderInteractivePath === 'function') {
+        renderInteractivePath(path);
+
+        // Reset to list view by default on new generation
+        const listBtn = document.getElementById('view-list-btn');
+        const graphBtn = document.getElementById('view-graph-btn');
+        const pathList = document.getElementById('path-list');
+        const pathVisualizer = document.getElementById('path-visualizer');
+
+        if (listBtn && graphBtn) {
+            listBtn.classList.add('active');
+            graphBtn.classList.remove('active');
+            pathList.classList.remove('hidden');
+            pathVisualizer.classList.add('hidden');
+        }
+    }
 }
 
 // ==================== SKILL GAP ANALYSIS ====================

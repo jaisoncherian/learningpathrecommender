@@ -1,0 +1,210 @@
+{
+    "achievements": [
+        {
+            "id": "first_step",
+            "name": "First Step",
+            "description": "Complete your first course",
+            "icon": "🎯",
+            "points": 50,
+            "condition": {
+                "type": "courses_completed",
+                "value": 1
+            }
+        },
+        {
+            "id": "knowledge_seeker",
+            "name": "Knowledge Seeker",
+            "description": "Complete 5 courses",
+            "icon": "📚",
+            "points": 150,
+            "condition": {
+                "type": "courses_completed",
+                "value": 5
+            }
+        },
+        {
+            "id": "learning_master",
+            "name": "Learning Master",
+            "description": "Complete 10 courses",
+            "icon": "🏆",
+            "points": 300,
+            "condition": {
+                "type": "courses_completed",
+                "value": 10
+            }
+        },
+        {
+            "id": "quiz_novice",
+            "name": "Quiz Novice",
+            "description": "Pass your first quiz",
+            "icon": "✅",
+            "points": 30,
+            "condition": {
+                "type": "quizzes_passed",
+                "value": 1
+            }
+        },
+        {
+            "id": "quiz_expert",
+            "name": "Quiz Expert",
+            "description": "Pass 10 quizzes",
+            "icon": "🎓",
+            "points": 200,
+            "condition": {
+                "type": "quizzes_passed",
+                "value": 10
+            }
+        },
+        {
+            "id": "perfect_score",
+            "name": "Perfect Score",
+            "description": "Get 100% on a quiz",
+            "icon": "💯",
+            "points": 100,
+            "condition": {
+                "type": "perfect_quiz",
+                "value": 1
+            }
+        },
+        {
+            "id": "week_warrior",
+            "name": "Week Warrior",
+            "description": "Maintain a 7-day learning streak",
+            "icon": "🔥",
+            "points": 150,
+            "condition": {
+                "type": "streak_days",
+                "value": 7
+            }
+        },
+        {
+            "id": "month_champion",
+            "name": "Month Champion",
+            "description": "Maintain a 30-day learning streak",
+            "icon": "⚡",
+            "points": 500,
+            "condition": {
+                "type": "streak_days",
+                "value": 30
+            }
+        },
+        {
+            "id": "skill_collector",
+            "name": "Skill Collector",
+            "description": "Learn 5 different skills",
+            "icon": "🌟",
+            "points": 200,
+            "condition": {
+                "type": "unique_skills",
+                "value": 5
+            }
+        },
+        {
+            "id": "path_explorer",
+            "name": "Path Explorer",
+            "description": "Generate your first learning path",
+            "icon": "🗺️",
+            "points": 25,
+            "condition": {
+                "type": "paths_generated",
+                "value": 1
+            }
+        },
+        {
+            "id": "early_bird",
+            "name": "Early Bird",
+            "description": "Complete a course before 9 AM",
+            "icon": "🌅",
+            "points": 75,
+            "condition": {
+                "type": "early_completion",
+                "value": 1
+            }
+        },
+        {
+            "id": "night_owl",
+            "name": "Night Owl",
+            "description": "Complete a course after 10 PM",
+            "icon": "🦉",
+            "points": 75,
+            "condition": {
+                "type": "late_completion",
+                "value": 1
+            }
+        },
+        {
+            "id": "quiz_enthusiast",
+            "name": "Quiz Enthusiast",
+            "description": "Attempt 3 quizzes",
+            "icon": "📝",
+            "points": 50,
+            "condition": {
+                "type": "quizzes_attempted",
+                "value": 3
+            }
+        },
+        {
+            "id": "quiz_warrior",
+            "name": "Quiz Warrior",
+            "description": "Attempt 10 quizzes",
+            "icon": "⚔️",
+            "points": 150,
+            "condition": {
+                "type": "quizzes_attempted",
+                "value": 10
+            }
+        }
+    ],
+    "levels": [
+        {
+            "level": 1,
+            "xp_required": 0,
+            "title": "Novice"
+        },
+        {
+            "level": 2,
+            "xp_required": 100,
+            "title": "Learner"
+        },
+        {
+            "level": 3,
+            "xp_required": 250,
+            "title": "Student"
+        },
+        {
+            "level": 4,
+            "xp_required": 500,
+            "title": "Scholar"
+        },
+        {
+            "level": 5,
+            "xp_required": 1000,
+            "title": "Expert"
+        },
+        {
+            "level": 6,
+            "xp_required": 2000,
+            "title": "Master"
+        },
+        {
+            "level": 7,
+            "xp_required": 3500,
+            "title": "Guru"
+        },
+        {
+            "level": 8,
+            "xp_required": 5500,
+            "title": "Sage"
+        },
+        {
+            "level": 9,
+            "xp_required": 8000,
+            "title": "Legend"
+        },
+        {
+            "level": 10,
+            "xp_required": 12000,
+            "title": "Grandmaster"
+        }
+    ]
+}

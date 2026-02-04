@@ -1,0 +1,842 @@
+[
+    {
+        "id": "q1",
+        "skill": "Python",
+        "difficulty": "Beginner",
+        "question": "What is the correct way to create a variable in Python?",
+        "options": [
+            "var x = 5",
+            "x = 5",
+            "int x = 5",
+            "declare x = 5"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Python uses dynamic typing, so you simply assign a value to a variable name without declaring its type."
+    },
+    {
+        "id": "q2",
+        "skill": "Python",
+        "difficulty": "Beginner",
+        "question": "Which data type is used to store text in Python?",
+        "options": [
+            "int",
+            "str",
+            "text",
+            "char"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The 'str' (string) data type is used to store text in Python."
+    },
+    {
+        "id": "q3",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "What does the 'self' parameter represent in a Python class method?",
+        "options": [
+            "The class itself",
+            "The instance of the class",
+            "A global variable",
+            "A static method"
+        ],
+        "correctAnswer": 1,
+        "explanation": "'self' refers to the instance of the class, allowing access to instance variables and methods."
+    },
+    {
+        "id": "q4",
+        "skill": "JavaScript",
+        "difficulty": "Beginner",
+        "question": "Which keyword is used to declare a constant in JavaScript?",
+        "options": [
+            "var",
+            "let",
+            "const",
+            "constant"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The 'const' keyword is used to declare constants in JavaScript (ES6+)."
+    },
+    {
+        "id": "q5",
+        "skill": "JavaScript",
+        "difficulty": "Intermediate",
+        "question": "What is the output of: console.log(typeof null)?",
+        "options": [
+            "null",
+            "undefined",
+            "object",
+            "number"
+        ],
+        "correctAnswer": 2,
+        "explanation": "This is a known JavaScript quirk. typeof null returns 'object', which is considered a bug in the language."
+    },
+    {
+        "id": "q6",
+        "skill": "React",
+        "difficulty": "Beginner",
+        "question": "What is JSX in React?",
+        "options": [
+            "A JavaScript library",
+            "A syntax extension for JavaScript",
+            "A CSS framework",
+            "A database query language"
+        ],
+        "correctAnswer": 1,
+        "explanation": "JSX is a syntax extension for JavaScript that allows you to write HTML-like code in your JavaScript files."
+    },
+    {
+        "id": "q7",
+        "skill": "React",
+        "difficulty": "Intermediate",
+        "question": "Which hook is used to manage state in functional components?",
+        "options": [
+            "useEffect",
+            "useState",
+            "useContext",
+            "useReducer"
+        ],
+        "correctAnswer": 1,
+        "explanation": "useState is the primary hook for managing state in React functional components."
+    },
+    {
+        "id": "q8",
+        "skill": "Web Development",
+        "difficulty": "Beginner",
+        "question": "What does HTML stand for?",
+        "options": [
+            "Hyper Text Markup Language",
+            "High Tech Modern Language",
+            "Home Tool Markup Language",
+            "Hyperlinks and Text Markup Language"
+        ],
+        "correctAnswer": 0,
+        "explanation": "HTML stands for Hyper Text Markup Language, the standard markup language for web pages."
+    },
+    {
+        "id": "q9",
+        "skill": "Machine Learning",
+        "difficulty": "Intermediate",
+        "question": "What is overfitting in machine learning?",
+        "options": [
+            "When a model performs well on training data but poorly on new data",
+            "When a model is too simple",
+            "When training takes too long",
+            "When the dataset is too large"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Overfitting occurs when a model learns the training data too well, including noise, and fails to generalize to new data."
+    },
+    {
+        "id": "q10",
+        "skill": "Machine Learning",
+        "difficulty": "Advanced",
+        "question": "Which algorithm is commonly used for dimensionality reduction?",
+        "options": [
+            "K-Means",
+            "Decision Trees",
+            "PCA (Principal Component Analysis)",
+            "Linear Regression"
+        ],
+        "correctAnswer": 2,
+        "explanation": "PCA is a widely used technique for reducing the number of features while preserving variance in the data."
+    },
+    {
+        "id": "q11",
+        "skill": "AWS",
+        "difficulty": "Beginner",
+        "question": "What does S3 stand for in AWS?",
+        "options": [
+            "Simple Storage Service",
+            "Secure Server System",
+            "Standard Storage Solution",
+            "Scalable Storage Service"
+        ],
+        "correctAnswer": 0,
+        "explanation": "S3 stands for Simple Storage Service, AWS's object storage service."
+    },
+    {
+        "id": "q12",
+        "skill": "AWS",
+        "difficulty": "Intermediate",
+        "question": "Which AWS service is used for serverless computing?",
+        "options": [
+            "EC2",
+            "Lambda",
+            "S3",
+            "RDS"
+        ],
+        "correctAnswer": 1,
+        "explanation": "AWS Lambda allows you to run code without provisioning or managing servers."
+    },
+    {
+        "id": "q13",
+        "skill": "Docker",
+        "difficulty": "Beginner",
+        "question": "What is a Docker container?",
+        "options": [
+            "A virtual machine",
+            "A lightweight, standalone executable package",
+            "A cloud storage service",
+            "A database management tool"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A Docker container is a lightweight, standalone, executable package that includes everything needed to run a piece of software."
+    },
+    {
+        "id": "q14",
+        "skill": "Docker",
+        "difficulty": "Intermediate",
+        "question": "What file is used to define a Docker container's configuration?",
+        "options": [
+            "docker.json",
+            "Dockerfile",
+            "container.yaml",
+            "config.docker"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A Dockerfile contains instructions for building a Docker image."
+    },
+    {
+        "id": "q15",
+        "skill": "Node.js",
+        "difficulty": "Beginner",
+        "question": "What is Node.js primarily used for?",
+        "options": [
+            "Frontend development",
+            "Server-side JavaScript execution",
+            "Database management",
+            "Mobile app development"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Node.js is a runtime environment that allows JavaScript to be executed on the server side."
+    },
+    {
+        "id": "q16",
+        "skill": "Node.js",
+        "difficulty": "Intermediate",
+        "question": "Which module is used to create a web server in Node.js?",
+        "options": [
+            "fs",
+            "http",
+            "path",
+            "url"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The 'http' module in Node.js is used to create web servers and handle HTTP requests."
+    },
+    {
+        "id": "q17",
+        "skill": "Databases",
+        "difficulty": "Beginner",
+        "question": "What does SQL stand for?",
+        "options": [
+            "Structured Query Language",
+            "Simple Question Language",
+            "Standard Query Logic",
+            "System Query Language"
+        ],
+        "correctAnswer": 0,
+        "explanation": "SQL stands for Structured Query Language, used for managing relational databases."
+    },
+    {
+        "id": "q18",
+        "skill": "Databases",
+        "difficulty": "Intermediate",
+        "question": "Which SQL command is used to retrieve data from a database?",
+        "options": [
+            "GET",
+            "FETCH",
+            "SELECT",
+            "RETRIEVE"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The SELECT statement is used to query and retrieve data from database tables."
+    },
+    {
+        "id": "q19",
+        "skill": "Algorithms",
+        "difficulty": "Intermediate",
+        "question": "What is the time complexity of binary search?",
+        "options": [
+            "O(n)",
+            "O(log n)",
+            "O(n\u00b2)",
+            "O(1)"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Binary search has O(log n) time complexity as it halves the search space with each iteration."
+    },
+    {
+        "id": "q20",
+        "skill": "Algorithms",
+        "difficulty": "Advanced",
+        "question": "Which sorting algorithm has the best average-case time complexity?",
+        "options": [
+            "Bubble Sort",
+            "Merge Sort",
+            "Insertion Sort",
+            "Selection Sort"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Merge Sort has O(n log n) average-case time complexity, which is optimal for comparison-based sorting."
+    },
+    {
+        "id": "q21",
+        "skill": "Python",
+        "difficulty": "Beginner",
+        "question": "How do you start a comment in Python?",
+        "options": [
+            "//",
+            "#",
+            "/*",
+            "--"
+        ],
+        "correctAnswer": 1,
+        "explanation": "In Python, the hash character (#) is used to start a comment."
+    },
+    {
+        "id": "q22",
+        "skill": "Python",
+        "difficulty": "Beginner",
+        "question": "Which method is used to add an item to the end of a list in Python?",
+        "options": [
+            "add()",
+            "push()",
+            "append()",
+            "insert()"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The append() method adds a single element to the end of the list."
+    },
+    {
+        "id": "q23",
+        "skill": "Python",
+        "difficulty": "Beginner",
+        "question": "What is the result of 3 ** 2 in Python?",
+        "options": [
+            "6",
+            "9",
+            "5",
+            "8"
+        ],
+        "correctAnswer": 1,
+        "explanation": "** is the exponentiation operator in Python. 3 squared is 9."
+    },
+    {
+        "id": "q24",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "Which of these is used to handle exceptions in Python?",
+        "options": [
+            "try-except",
+            "throw-catch",
+            "do-while",
+            "begin-end"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Python uses try-except blocks to catch and handle exceptions."
+    },
+    {
+        "id": "q25",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "What does the 'len()' function return for a dictionary?",
+        "options": [
+            "Number of keys",
+            "Sum of values",
+            "Size in memory",
+            "Number of characters"
+        ],
+        "correctAnswer": 0,
+        "explanation": "For a dictionary, len() returns the number of key-value pairs (the number of keys)."
+    },
+    {
+        "id": "q26",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "How do you create a function in Python?",
+        "options": [
+            "func myFn():",
+            "function myFn()",
+            "def myFn():",
+            "new function myFn()"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Functions are defined using the 'def' keyword followed by the function name and parentheses."
+    },
+    {
+        "id": "q27",
+        "skill": "Python",
+        "difficulty": "Advanced",
+        "question": "What is a decorator in Python?",
+        "options": [
+            "A graphical element",
+            "A function that modifies another function",
+            "A class inherited from Object",
+            "A list formatted for printing"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A decorator is a design pattern that allows you to add new functionality to an existing object without modifying its structure."
+    },
+    {
+        "id": "q28",
+        "skill": "Python",
+        "difficulty": "Advanced",
+        "question": "What is the purpose of '__init__.py' in a directory?",
+        "options": [
+            "Initialize the system",
+            "Marks the directory as a Python package",
+            "Sets global variables",
+            "Speeds up loading"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The __init__.py file is used to mark directories on disk as Python package directories."
+    },
+    {
+        "id": "q29",
+        "skill": "Python",
+        "difficulty": "Advanced",
+        "question": "What is a 'lambda' function in Python?",
+        "options": [
+            "A serverless function",
+            "An anonymous, one-line function",
+            "A function that repeats",
+            "A function used for math"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Lambda functions are small, anonymous functions defined with the 'lambda' keyword."
+    },
+    {
+        "id": "q30",
+        "skill": "JavaScript",
+        "difficulty": "Beginner",
+        "question": "What does DOM stand for?",
+        "options": [
+            "Document Object Model",
+            "Direct Object Mapping",
+            "Data Oriented Module",
+            "Digital Object Method"
+        ],
+        "correctAnswer": 0,
+        "explanation": "DOM stands for Document Object Model, a programming interface for web documents."
+    },
+    {
+        "id": "q31",
+        "skill": "JavaScript",
+        "difficulty": "Beginner",
+        "question": "Which symbol is used for strict equality in JavaScript?",
+        "options": [
+            "=",
+            "==",
+            "===",
+            "!="
+        ],
+        "correctAnswer": 2,
+        "explanation": "=== checks for both value and type equality (strict equality)."
+    },
+    {
+        "id": "q32",
+        "skill": "JavaScript",
+        "difficulty": "Beginner",
+        "question": "How do you write 'Hello World' in an alert box?",
+        "options": [
+            "msg('Hello World')",
+            "alert('Hello World')",
+            "display('Hello World')",
+            "prompt('Hello World')"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The alert() method displays an alert box with a specified message."
+    },
+    {
+        "id": "q33",
+        "skill": "JavaScript",
+        "difficulty": "Intermediate",
+        "question": "What is a closure in JavaScript?",
+        "options": [
+            "A way to close a file",
+            "A function combined with its lexical environment",
+            "A loop that never ends",
+            "A syntax error"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A closure gives you access to an outer function's scope from an inner function."
+    },
+    {
+        "id": "q34",
+        "skill": "JavaScript",
+        "difficulty": "Intermediate",
+        "question": "What does the 'map()' method do on an array?",
+        "options": [
+            "Modifies the original array",
+            "Creates a new array with results of a function",
+            "Finds the location of the array",
+            "Sorts the array"
+        ],
+        "correctAnswer": 1,
+        "explanation": "map() creates a new array populated with the results of calling a provided function on every element in the array."
+    },
+    {
+        "id": "q35",
+        "skill": "JavaScript",
+        "difficulty": "Intermediate",
+        "question": "What is hoisting in JavaScript?",
+        "options": [
+            "Moving variables to the top of their scope",
+            "Boosting performance",
+            "Elevating UI elements",
+            "Stopping execution"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Hoisting is a behavior where variable and function declarations are moved to the top of their containing scope during compilation."
+    },
+    {
+        "id": "q36",
+        "skill": "JavaScript",
+        "difficulty": "Advanced",
+        "question": "What is the Promise object used for?",
+        "options": [
+            "Defining variables",
+            "Connecting to a database",
+            "Asynchronous computations",
+            "Calculating mathematical results"
+        ],
+        "correctAnswer": 2,
+        "explanation": "A Promise is an object representing the eventual completion (or failure) of an asynchronous operation."
+    },
+    {
+        "id": "q37",
+        "skill": "JavaScript",
+        "difficulty": "Advanced",
+        "question": "What is the 'Event Loop'?",
+        "options": [
+            "A loop for game development",
+            "Mechanism that handles non-blocking I/O",
+            "A recurring schedule",
+            "A loop that checks for updates"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The Event Loop is the mechanism that allows JavaScript to perform non-blocking I/O operations by offloading tasks."
+    },
+    {
+        "id": "q38",
+        "skill": "Web Development",
+        "difficulty": "Beginner",
+        "question": "Which HTML tag is used to link a JavaScript file?",
+        "options": [
+            "<link>",
+            "<js>",
+            "<script>",
+            "<style>"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The <script> tag is used to embed or reference executable script (usually JavaScript)."
+    },
+    {
+        "id": "q39",
+        "skill": "Web Development",
+        "difficulty": "Beginner",
+        "question": "What does CSS stand for?",
+        "options": [
+            "Colorful Style Sheets",
+            "Cascading Style Sheets",
+            "Computer Style Sheets",
+            "Creative Style Systems"
+        ],
+        "correctAnswer": 1,
+        "explanation": "CSS stands for Cascading Style Sheets, used for styling HTML elements."
+    },
+    {
+        "id": "q40",
+        "skill": "Web Development",
+        "difficulty": "Intermediate",
+        "question": "What is the purpose of 'z-index' in CSS?",
+        "options": [
+            "Sets the zoom level",
+            "Sets the stack order of elements",
+            "Sets the width of an element",
+            "Sets the transparency"
+        ],
+        "correctAnswer": 1,
+        "explanation": "z-index specifies the stack order of an element. Elements with higher z-index are in front of lower ones."
+    },
+    {
+        "id": "q41",
+        "skill": "Web Development",
+        "difficulty": "Intermediate",
+        "question": "What keyword is used in CSS for a flexbox container?",
+        "options": [
+            "layout: flex",
+            "type: flex",
+            "display: flex",
+            "flex-container: true"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Setting 'display: flex' enables the flexbox layout module for an element."
+    },
+    {
+        "id": "q42",
+        "skill": "Web Development",
+        "difficulty": "Intermediate",
+        "question": "What is semantic HTML?",
+        "options": [
+            "HTML with animations",
+            "HTML that describes its meaning and structure",
+            "Minified HTML",
+            "HTML translated to other languages"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Semantic HTML tags like <header>, <footer>, and <article> describe the role of the content they enclose."
+    },
+    {
+        "id": "q43",
+        "skill": "Web Development",
+        "difficulty": "Advanced",
+        "question": "What is CORS?",
+        "options": [
+            "Cross-Origin Resource Sharing",
+            "Central Object Resource System",
+            "Core Object Routing Site",
+            "Common Origin Retrieval Service"
+        ],
+        "correctAnswer": 0,
+        "explanation": "CORS is a mechanism that uses additional HTTP headers to tell browsers to give a web application access to selected resources from a different origin."
+    },
+    {
+        "id": "q44",
+        "skill": "Algorithms",
+        "difficulty": "Beginner",
+        "question": "What is an algorithm?",
+        "options": [
+            "A computer program",
+            "A set of instructions to solve a problem",
+            "A type of database",
+            "A hardware component"
+        ],
+        "correctAnswer": 1,
+        "explanation": "An algorithm is a step-by-step procedure or set of rules for solving a specific problem or achieving a particular task."
+    },
+    {
+        "id": "q45",
+        "skill": "Algorithms",
+        "difficulty": "Beginner",
+        "question": "Which of these is used to represent an algorithm visually?",
+        "options": [
+            "Bar chart",
+            "Flowchart",
+            "Pie chart",
+            "Spreadsheet"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Flowcharts are used to visually represent the sequence of operations in an algorithm."
+    },
+    {
+        "id": "q46",
+        "skill": "Algorithms",
+        "difficulty": "Intermediate",
+        "question": "What is the Big O complexity of searching in a Hash Table (average case)?",
+        "options": [
+            "O(n)",
+            "O(log n)",
+            "O(1)",
+            "O(n log n)"
+        ],
+        "correctAnswer": 2,
+        "explanation": "In the average case, lookups in a hash table have O(1) constant time complexity."
+    },
+    {
+        "id": "q47",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "What is the purpose of the 'with' statement in Python?",
+        "options": [
+            "To create a loop",
+            "To manage external resources like files",
+            "To define a class",
+            "To import modules"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The 'with' statement is used for resource management and ensures that cleanup (like closing a file) happens properly."
+    },
+    {
+        "id": "q48",
+        "skill": "Python",
+        "difficulty": "Intermediate",
+        "question": "What is a Python tuple?",
+        "options": [
+            "An immutable list",
+            "A mutable list",
+            "A type of dictionary",
+            "A function"
+        ],
+        "correctAnswer": 0,
+        "explanation": "A tuple is an immutable (unchangeable) sequence of elements."
+    },
+    {
+        "id": "q49",
+        "skill": "JavaScript",
+        "difficulty": "Advanced",
+        "question": "What is the 'Spread Operator' in JavaScript?",
+        "options": [
+            "...",
+            "??",
+            "||",
+            "&&"
+        ],
+        "correctAnswer": 0,
+        "explanation": "The spread operator (...) allows an iterable (like an array) to be expanded in places where multiple arguments or elements are expected."
+    },
+    {
+        "id": "q50",
+        "skill": "JavaScript",
+        "difficulty": "Advanced",
+        "question": "What is 'Destructuring assignment'?",
+        "options": [
+            "A way to delete variables",
+            "Unpacking values from arrays or objects into distinct variables",
+            "Assigning null to complex objects",
+            "Reorganizing code structure"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Destructuring is a special syntax that allows us to 'unpack' arrays or objects into several variables."
+    },
+    {
+        "id": "q51",
+        "skill": "Web Development",
+        "difficulty": "Beginner",
+        "question": "Which of these is NOT a valid value for the 'target' attribute of an <a> tag?",
+        "options": [
+            "_blank",
+            "_self",
+            "_parent",
+            "_inside"
+        ],
+        "correctAnswer": 3,
+        "explanation": "_inside is not a standard value for the target attribute."
+    },
+    {
+        "id": "q52",
+        "skill": "Web Development",
+        "difficulty": "Intermediate",
+        "question": "What is the default value of the 'position' property in CSS?",
+        "options": [
+            "relative",
+            "absolute",
+            "static",
+            "fixed"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The default position for all elements is 'static'."
+    },
+    {
+        "id": "q53",
+        "skill": "Web Development",
+        "difficulty": "Intermediate",
+        "question": "What does the 'rem' unit in CSS stand for?",
+        "options": [
+            "Relative Element Measure",
+            "Root Element em",
+            "Real Error Margin",
+            "Responsive Edition Method"
+        ],
+        "correctAnswer": 1,
+        "explanation": "rem stands for 'root em' and is relative to the font-size of the root element (html)."
+    },
+    {
+        "id": "q54",
+        "skill": "Web Development",
+        "difficulty": "Advanced",
+        "question": "What is the purpose of 'Service Workers'?",
+        "options": [
+            "To speed up CPU",
+            "To allow offline functionality and background tasks",
+            "To manage database connections",
+            "To style components"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Service workers act as proxy servers between web applications, the browser, and the network, enabling offline experiences."
+    },
+    {
+        "id": "q55",
+        "skill": "Algorithms",
+        "difficulty": "Intermediate",
+        "question": "What is the recursive case in a recursive function?",
+        "options": [
+            "The case that stops the recursion",
+            "The case where the function calls itself",
+            "The case that returns an error",
+            "The initial input"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The recursive case is the part of the function where it calls itself with a modified input."
+    },
+    {
+        "id": "q56",
+        "skill": "Algorithms",
+        "difficulty": "Beginner",
+        "question": "What is 'LIFO' in the context of a Stack?",
+        "options": [
+            "Last In Fast Out",
+            "Last In First Out",
+            "Line In Floor Out",
+            "Left In Fine Out"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Stacks follow the Last In, First Out (LIFO) principle."
+    },
+    {
+        "id": "q57",
+        "skill": "Algorithms",
+        "difficulty": "Intermediate",
+        "question": "Which data structure uses a 'FIFO' principle?",
+        "options": [
+            "Stack",
+            "Queue",
+            "Tree",
+            "Graph"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Queues follow the First In, First Out (FIFO) principle."
+    },
+    {
+        "id": "q58",
+        "skill": "Algorithms",
+        "difficulty": "Advanced",
+        "question": "What is the time complexity of Quick Sort in its worst case?",
+        "options": [
+            "O(n log n)",
+            "O(n)",
+            "O(n\u00b2)",
+            "O(log n)"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Quick Sort has O(n\u00b2) worst-case time complexity, though its average case is O(n log n)."
+    },
+    {
+        "id": "q59",
+        "skill": "Algorithms",
+        "difficulty": "Intermediate",
+        "question": "What is a 'Linked List'?",
+        "options": [
+            "A list of URLs",
+            "A sequential collection of nodes where each points to the next",
+            "A type of database join",
+            "A CSS selector"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A linked list is a linear data structure where elements are stored in nodes that contain a reference to the next node."
+    },
+    {
+        "id": "q60",
+        "skill": "Algorithms",
+        "difficulty": "Advanced",
+        "question": "What is Dijkstra's algorithm used for?",
+        "options": [
+            "Sorting a list",
+            "Finding the shortest path in a graph",
+            "Encrypting data",
+            "Compressing images"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Dijkstra's algorithm is a popular algorithm for finding the shortest paths between nodes in a graph."
+    }
+]

@@ -23,6 +23,8 @@ function getDefaultProgress() {
         completed_courses: [],
         completed_quizzes: [],
         skills_learned: [],
+        enrolled_courses: [],
+        high_scores: {},
         username: 'Pilot',
         last_notified_level: 1
     };
@@ -33,7 +35,9 @@ function loadProgress() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-            return JSON.parse(stored);
+            const parsed = JSON.parse(stored);
+            // Merge with default to ensure all fields exist (migration for old data)
+            return { ...getDefaultProgress(), ...parsed };
         }
     } catch (error) {
         console.error('Error loading progress:', error);
@@ -77,6 +81,53 @@ async function addXP(amount, source = 'unknown', existingProgress = null) {
     };
 }
 
+// Enroll in a course
+async function enrollInCourse(courseId) {
+    const progress = loadProgress();
+
+    if (progress.enrolled_courses.includes(courseId)) {
+        return { already_enrolled: true };
+    }
+
+    progress.enrolled_courses.push(courseId);
+
+    // Calculate XP for enrollment
+    const xpResult = await addXP(10, 'course_enroll', progress);
+
+    saveProgress(progress);
+
+    return {
+        success: true,
+        xp_result: xpResult,
+        progress: progress
+    };
+}
+
+// Unenroll from a course
+async function unenrollFromCourse(courseId) {
+    const progress = loadProgress();
+
+    if (!progress.enrolled_courses.includes(courseId)) {
+        return { not_enrolled: true };
+    }
+
+    // Remove from enrolled courses
+    progress.enrolled_courses = progress.enrolled_courses.filter(id => id !== courseId);
+
+    // Deduct XP (reverse enrollment bonus)
+    // We allow XP to go below 0 theoretically, or we can floor it at 0.
+    // Let's just subtract. If they abuse it, they just lose XP they gained.
+    const xpResult = await addXP(-10, 'course_unenroll', progress);
+
+    saveProgress(progress);
+
+    return {
+        success: true,
+        xp_result: xpResult,
+        progress: progress
+    };
+}
+
 // Mark a course as completed
 async function completeCourse(courseId, courseTitle, difficulty, skills) {
     const progress = loadProgress();
@@ -91,11 +142,15 @@ async function completeCourse(courseId, courseTitle, difficulty, skills) {
     progress.courses_completed++;
 
     // Update unique skills
-    skills.forEach(skill => {
-        if (!progress.skills_learned.includes(skill)) {
-            progress.skills_learned.push(skill);
-        }
-    });
+    if (Array.isArray(skills)) {
+        skills.forEach(skill => {
+            // Normalize skill string to prevent duplicates like "Python " vs "Python"
+            const normalizedSkill = skill.trim();
+            if (normalizedSkill && !progress.skills_learned.includes(normalizedSkill)) {
+                progress.skills_learned.push(normalizedSkill);
+            }
+        });
+    }
     progress.unique_skills = progress.skills_learned.length;
 
     // Check time of day for achievements
@@ -148,9 +203,25 @@ async function completeQuiz(quizId, skill, score, isPerfect) {
     // Update streak
     updateStreak(progress);
 
+    // Check for high score
+    let isNewHighScore = false;
+    const currentHighScore = progress.high_scores[quizId] || 0;
+
+    if (score > currentHighScore) {
+        progress.high_scores[quizId] = score;
+        isNewHighScore = true;
+    }
+
     // Calculate XP
-    const xpAmount = isPerfect ? 100 : (score >= 60 ? 30 : 10);
-    const xpResult = await addXP(xpAmount, 'quiz_complete', progress);
+    let xpAmount = isPerfect ? 100 : (score >= 60 ? 30 : 10);
+
+    // Add bonus for new high score (if previous score existed)
+    if (isNewHighScore && currentHighScore > 0) {
+        xpAmount += 20;
+    }
+
+    const xpActionType = isNewHighScore && currentHighScore > 0 ? 'new_high_score' : 'quiz_complete';
+    const xpResult = await addXP(xpAmount, xpActionType, progress);
 
     saveProgress(progress);
 
@@ -205,7 +276,22 @@ async function calculateLevel(xp) {
         return data.level_info;
     } catch (error) {
         console.error('Error calculating level:', error);
-        return { current_level: 1, current_title: 'Novice' };
+
+        // Robust Fallback Calculation (Linear 100 XP)
+        const safeXP = (typeof xp === 'number' && !isNaN(xp)) ? xp : 0;
+        const fallbackLevel = Math.floor(safeXP / 100) + 1;
+        const xpForCurrent = (fallbackLevel - 1) * 100;
+        const xpForNext = fallbackLevel * 100;
+
+        return {
+            current_level: fallbackLevel,
+            current_title: 'Pilot', // Fallback title
+            current_xp: safeXP,
+            xp_for_current_level: xpForCurrent,
+            xp_for_next_level: xpForNext,
+            xp_progress: safeXP - xpForCurrent,
+            xp_needed: xpForNext - safeXP
+        };
     }
 }
 
@@ -248,6 +334,9 @@ window.ProgressStorage = {
     loadProgress,
     saveProgress,
     addXP,
+    addXP,
+    enrollInCourse,
+    unenrollFromCourse,
     completeCourse,
     completeQuiz,
     recordPathGeneration,

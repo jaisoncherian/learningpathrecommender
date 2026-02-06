@@ -4,7 +4,7 @@ Generates personalized learning paths based on target skill and user level.
 """
 
 
-def generate_path(courses, target_skill, level='Beginner'):
+def generate_path(courses, target_skill, level='Beginner', completed_courses=None):
     """
     Generate a learning path for a target skill.
     
@@ -12,10 +12,11 @@ def generate_path(courses, target_skill, level='Beginner'):
         courses: List of course dictionaries
         target_skill: Target skill to learn
         level: User's current skill level (Beginner, Intermediate, Advanced)
-    
-    Returns:
-        List of courses ordered by prerequisites
+        completed_courses: List of course IDs already completed by user
     """
+    if completed_courses is None:
+        completed_courses = []
+
     level_order = {'Beginner': 0, 'Intermediate': 1, 'Advanced': 2}
     user_level = level_order.get(level, 0)
     
@@ -32,11 +33,16 @@ def generate_path(courses, target_skill, level='Beginner'):
         """Recursively add course with its prerequisites."""
         course_id = course['id']
         
-        if course_id in visited:
+        # Skip if already visited or completed
+        if course_id in visited or course_id in completed_courses:
             return
         
         # Add prerequisites first
         for prereq_id in course.get('prerequisites', []):
+            # Skip prerequisites if they are already completed (assumed knowledge)
+            if prereq_id in completed_courses:
+                continue
+
             prereq_course = next(
                 (c for c in courses if c['id'] == prereq_id), 
                 None
@@ -56,6 +62,10 @@ def generate_path(courses, target_skill, level='Beginner'):
         
         # Only include courses at or below user's level
         if course_level > user_level:
+            continue
+        
+        # Skip if the target course itself is completed
+        if course['id'] in completed_courses:
             continue
         
         add_with_prerequisites(course, visited, result)

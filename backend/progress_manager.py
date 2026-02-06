@@ -16,33 +16,35 @@ def load_achievements():
 
 
 def calculate_level(xp):
-    """Calculate user level based on total XP."""
+    """Calculate user level based on total XP (Linear: 100 XP per level)."""
     achievements_data = load_achievements()
     levels = achievements_data['levels']
     
-    current_level = 1
-    for level_data in reversed(levels):
-        if xp >= level_data['xp_required']:
-            current_level = level_data['level']
-            break
+    # Linear Formula
+    # Level 1: 0-99 XP
+    # Level 2: 100-199 XP
+    current_level = (xp // 100) + 1
+    xp_for_current_level = (current_level - 1) * 100
+    xp_for_next_level = current_level * 100
     
-    # Find next level info
-    next_level_data = None
+    # Find title
+    # Default to the highest title if level exceeds defined levels
+    current_title = "Master"
     for level_data in levels:
-        if level_data['level'] == current_level + 1:
-            next_level_data = level_data
+        if level_data['level'] == current_level:
+            current_title = level_data['title']
             break
-    
-    current_level_data = next((l for l in levels if l['level'] == current_level), levels[0])
-    
+        if level_data['level'] < current_level:
+            current_title = level_data['title'] # Keep taking the highest so far
+
     return {
         'current_level': current_level,
-        'current_title': current_level_data['title'],
+        'current_title': current_title,
         'current_xp': xp,
-        'xp_for_current_level': current_level_data['xp_required'],
-        'xp_for_next_level': next_level_data['xp_required'] if next_level_data else None,
-        'xp_progress': xp - current_level_data['xp_required'],
-        'xp_needed': (next_level_data['xp_required'] - xp) if next_level_data else 0
+        'xp_for_current_level': xp_for_current_level,
+        'xp_for_next_level': xp_for_next_level,
+        'xp_progress': xp - xp_for_current_level,
+        'xp_needed': xp_for_next_level - xp
     }
 
 
@@ -131,7 +133,9 @@ def calculate_xp_for_action(action_type, details=None):
         'quiz_perfect': 100,
         'path_generate': 10,
         'daily_login': 5,
-        'streak_bonus': 20
+        'streak_bonus': 20,
+        'course_enroll': 10,
+        'new_high_score': 20
     }
     
     base_xp = xp_values.get(action_type, 0)

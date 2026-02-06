@@ -101,6 +101,7 @@ def recommend():
         data = request.json or {}
         target_skill = data.get('skill', '').strip()
         level = data.get('level', 'Beginner').strip()
+        completed_courses = data.get('completed_courses', [])
         
         if not target_skill:
             return jsonify({
@@ -114,7 +115,7 @@ def recommend():
                 'error': f'Invalid level. Must be one of: Beginner, Intermediate, Advanced'
             }), 400
         
-        path = generate_path(COURSES, target_skill, level)
+        path = generate_path(COURSES, target_skill, level, completed_courses)
         stats = calculate_path_stats(path)
         
         return jsonify({

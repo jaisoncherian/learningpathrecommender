@@ -203,10 +203,14 @@ async function updateProgressDisplay() {
 
     // Calculate XP progress percentage
     if (headerXPBar) {
-        const xpProgress = levelInfo.xp_for_next_level
-            ? (levelInfo.xp_progress / (levelInfo.xp_for_next_level - levelInfo.xp_for_current_level)) * 100
-            : 100;
-        headerXPBar.style.width = `${Math.min(xpProgress, 100)}%`;
+        const nextLevelXP = levelInfo.xp_for_next_level || (levelInfo.current_xp + 100);
+        const currentLevelXP = levelInfo.xp_for_current_level || 0;
+        const xpProgressVal = levelInfo.xp_progress || (levelInfo.current_xp - currentLevelXP);
+
+        const totalForLevel = nextLevelXP - currentLevelXP;
+        const safePercent = (totalForLevel > 0) ? (xpProgressVal / totalForLevel) * 100 : 0;
+
+        headerXPBar.style.width = `${Math.min(safePercent, 100)}%`;
     }
 
     // Check for un-notified level ups
@@ -253,13 +257,15 @@ function updateProgressDashboard(progress, levelInfo) {
     if (levelTitle) levelTitle.textContent = levelInfo.current_title;
 
     if (xpFill && xpLabel) {
-        const xpProgress = levelInfo.xp_for_next_level
-            ? (levelInfo.xp_progress / (levelInfo.xp_for_next_level - levelInfo.xp_for_current_level)) * 100
-            : 100;
-        xpFill.style.width = `${Math.min(xpProgress, 100)}%`;
+        const nextLevelXP = levelInfo.xp_for_next_level || (levelInfo.current_xp + 100);
+        const currentLevelXP = levelInfo.xp_for_current_level || 0;
+        const xpProgressVal = levelInfo.xp_progress || (levelInfo.current_xp - currentLevelXP);
 
-        const nextLevelXP = levelInfo.xp_for_next_level || levelInfo.current_xp;
-        xpLabel.textContent = `${levelInfo.xp_progress} / ${nextLevelXP - levelInfo.xp_for_current_level} XP`;
+        const totalForLevel = nextLevelXP - currentLevelXP;
+        const safePercent = (totalForLevel > 0) ? (xpProgressVal / totalForLevel) * 100 : 0;
+
+        xpFill.style.width = `${Math.min(safePercent, 100)}%`;
+        xpLabel.textContent = `${xpProgressVal} / ${totalForLevel} XP`;
     }
 
     // Update stats
@@ -270,6 +276,44 @@ function updateProgressDashboard(progress, levelInfo) {
 
     // Load achievements
     loadAchievements(progress);
+
+    // Render completed courses
+    renderCompletedCourses(progress);
+}
+
+function renderCompletedCourses(progress) {
+    const container = document.getElementById('completed-courses-list');
+    if (!container) return;
+
+    if (!progress.completed_courses || progress.completed_courses.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No missions completed yet.</p>';
+        return;
+    }
+
+    const courseList = window.allCoursesList || [];
+
+    // Create HTML for list
+    // If course list is not yet loaded, we might show IDs or wait. 
+    // Ideally script.js loads courses then updates display.
+
+    const html = progress.completed_courses.map(courseId => {
+        const course = courseList.find(c => c.id === courseId);
+        const title = course ? course.title : `Unknown Course (${courseId})`;
+        const difficulty = course ? course.difficulty : 'N/A';
+        const diffClass = difficulty.toLowerCase();
+
+        return `
+            <div class="completed-course-item glass-card" style="padding: 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <div style="background:var(--success); color:white; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem;">✓</div>
+                    <span style="font-weight:600;">${title}</span>
+                </div>
+                <span class="badge-tag diff-${diffClass}" style="scale: 0.9;">${difficulty}</span>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = html;
 }
 
 async function loadAchievements(progress) {

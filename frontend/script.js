@@ -23,6 +23,7 @@ const modalAction = document.getElementById('modal-action');
 let currentSuggestedLevel = 'Intermediate';
 let currentTargetSkill = '';
 let allCoursesList = []; // Store full list for searching
+window.allCoursesList = [];
 
 // ==================== INITIALIZATION ====================
 
@@ -187,11 +188,17 @@ async function loadCourses() {
     try {
         const response = await apiCall('/courses');
         allCoursesList = response.data;
+        window.allCoursesList = allCoursesList; // Make globally accessible
 
         // Update header stat
         document.getElementById('total-courses-stat').textContent = allCoursesList.length;
 
         renderCourseCatalog(allCoursesList);
+
+        // Update progress display now that we have course data
+        if (typeof updateProgressDisplay === 'function') {
+            updateProgressDisplay();
+        }
     } catch (error) {
         console.error('Failed to load courses:', error);
     }
@@ -236,6 +243,38 @@ function createCourseGridCard(course) {
 
     const difficultyClass = `diff-${course.difficulty.toLowerCase()}`;
 
+    // Check progress state
+    const progress = ProgressStorage.loadProgress();
+    const isEnrolled = progress.enrolled_courses && progress.enrolled_courses.includes(course.id);
+    const isCompleted = progress.completed_courses && progress.completed_courses.includes(course.id);
+
+    let actionButtons = '';
+
+    if (isCompleted) {
+        actionButtons = `
+            <button class="btn-success btn-small" disabled style="opacity: 0.8; cursor: default; flex: 1;">✓ Completed</button>
+            <button class="btn-secondary btn-small" onclick="openQuiz('${course.id}')">Retake Quiz</button>
+        `;
+    } else if (isEnrolled) {
+        actionButtons = `
+            <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%;">
+                <div style="display:flex; gap:0.5rem;">
+                    <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="flex: 2; padding: 0.75rem;">Continue ↗</a>
+                    <button class="btn-success btn-small" onclick="markCourseComplete('${course.id}')" style="flex:1;">✓ Done</button>
+                </div>
+                <div style="display:flex; gap:0.5rem;">
+                    <button class="btn-secondary btn-small" onclick="openQuiz('${course.id}')" style="flex:1;">📝 Quiz</button>
+                    <button class="btn-secondary btn-small" onclick="unenrollCourse('${course.id}')" style="flex:1; background:rgba(255,100,100,0.1); color:#ff6b6b; border-color:#ff6b6b">Unenroll</button>
+                </div>
+            </div>
+        `;
+    } else {
+        actionButtons = `
+            <button class="btn-primary" onclick="enrollCourse('${course.id}')" style="flex: 1; padding: 0.75rem;">Enroll Now</button>
+            <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-small" style="padding: 0.75rem;">Preview</a>
+        `;
+    }
+
     card.innerHTML = `
         <div class="course-header">
             <h4 class="course-title" style="margin:0">${escapeHtml(course.title)}</h4>
@@ -248,14 +287,38 @@ function createCourseGridCard(course) {
                 ${course.skills.map(skill => `<span class="badge-tag" style="background:var(--bg-darker); color:var(--text-muted)">${escapeHtml(skill)}</span>`).join('')}
             </div>
             <div class="course-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <a href="${course.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="flex: 1; padding: 0.75rem; font-size: 0.9rem; border-radius: 8px; min-width: 100px; text-align: center;">Explore ↗</a>
-                <button class="btn-secondary btn-small" onclick="startQuiz(${JSON.stringify(course.skills).replace(/"/g, '&quot;')}, '${course.difficulty}')" style="padding: 0.75rem 1rem; font-size: 0.85rem;">📝 Quiz</button>
-                <button class="btn-success btn-small" onclick="markCourseComplete('${course.id}', '${escapeHtml(course.title)}', '${course.difficulty}', ${JSON.stringify(course.skills)})" style="padding: 0.75rem 1rem; font-size: 0.85rem;">✓ Done</button>
+                ${actionButtons}
             </div>
         </div>
     `;
 
     return card;
+}
+
+async function enrollCourse(courseId, courseTitle) {
+    try {
+        const result = await ProgressStorage.enrollInCourse(courseId);
+
+        if (result.already_enrolled) {
+            return;
+        }
+
+        if (result.success) {
+            // Show notification
+            alert(`Enrolled in "${courseTitle}"! +${result.xp_result.xp_earned} XP`);
+
+            // Update UI
+            if (typeof updateProgressDisplay === 'function') {
+                updateProgressDisplay();
+            }
+
+            // Refresh course list to show new buttons
+            loadCourses();
+        }
+    } catch (error) {
+        console.error('Error enrolling in course:', error);
+        alert('Failed to enroll. Please try again.');
+    }
 }
 
 // ==================== RECOMMENDATION ====================
@@ -278,9 +341,12 @@ async function generateRecommendation() {
         `;
         recommendationError.classList.add('hidden');
 
+        const progress = ProgressStorage.loadProgress();
+
         const response = await apiCall('/recommend', 'POST', {
             skill: skill,
-            level: level
+            level: level,
+            completed_courses: progress.completed_courses || []
         });
 
         if (response.path.length === 0) {
@@ -533,3 +599,135 @@ async function checkHealth() {
         console.warn('Make sure the Flask backend is running on http://localhost:5000');
     }
 }
+
+async function markCourseComplete(courseId) {
+    const course = allCoursesList.find(c => c.id === courseId);
+    if (!course) {
+        console.error('Course not found:', courseId);
+        return;
+    }
+
+    if (!confirm(`Mark "${course.title}" as complete?`)) {
+        return;
+    }
+
+    try {
+        const result = await ProgressStorage.completeCourse(courseId, course.title, course.difficulty, course.skills);
+
+        if (result.already_completed) {
+            alert('You have already completed this course!');
+            return;
+        }
+
+        if (result.success) {
+            // Show XP notification
+            alert(`Course Completed! +${result.xp_result.xp_earned} XP`);
+
+            // Show Achievement Notifications
+            if (result.new_achievements && result.new_achievements.length > 0) {
+                result.new_achievements.forEach(achievement => {
+                    // Use a slightly delayed alert or a custom notification if available
+                    // For now, using alert to ensure visibility
+                    setTimeout(() => {
+                        alert(`🏆 Achievement Unlocked: ${achievement.name}\n${achievement.description}\n+${achievement.points} XP`);
+                    }, 500);
+                });
+            }
+
+            // Update UI
+            if (typeof updateProgressDisplay === 'function') {
+                updateProgressDisplay();
+            }
+
+            // Refresh course list
+            loadCourses();
+        }
+    } catch (error) {
+        console.error('Error completing course:', error);
+        alert('Failed to mark course as complete.');
+    }
+}
+
+async function enrollCourse(courseId) {
+    const course = allCoursesList.find(c => c.id === courseId);
+    if (!course) {
+        console.error('Course not found:', courseId);
+        return;
+    }
+
+    try {
+        const result = await ProgressStorage.enrollInCourse(courseId);
+
+        if (result.already_enrolled) {
+            return;
+        }
+
+        if (result.success) {
+            // Show notification
+            alert(`Enrolled in "${course.title}"! +${result.xp_result.xp_earned} XP`);
+
+            // Update UI
+            if (typeof updateProgressDisplay === 'function') {
+                updateProgressDisplay();
+            }
+
+            // Refresh course list to show new buttons
+            loadCourses();
+        }
+    } catch (error) {
+        console.error('Error enrolling in course:', error);
+        alert('Failed to enroll. Please try again.');
+    }
+}
+
+async function unenrollCourse(courseId) {
+    const course = allCoursesList.find(c => c.id === courseId);
+    if (!course) {
+        console.error('Course not found:', courseId);
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to unenroll from "${course.title}"? You will lose the XP gained from enrollment.`)) {
+        return;
+    }
+
+    try {
+        const result = await ProgressStorage.unenrollFromCourse(courseId);
+
+        if (result.success) {
+            // Show notification
+            alert(`Unenrolled from "${courseTitle}". -10 XP.`);
+
+            // Update UI
+            if (typeof updateProgressDisplay === 'function') {
+                updateProgressDisplay();
+            }
+
+            // Refresh course list
+            loadCourses();
+        }
+    } catch (error) {
+        console.error('Error unenrolling from course:', error);
+        alert('Failed to unenroll.');
+    }
+}
+
+// Helper to open quiz safely
+function openQuiz(courseId) {
+    const course = allCoursesList.find(c => c.id === courseId);
+    if (course && typeof startQuiz === 'function') {
+        startQuiz(course.skills, course.difficulty);
+    } else {
+        console.error('Cannot start quiz. Course not found or startQuiz missing.');
+    }
+}
+
+window.enrollCourse = enrollCourse;
+window.unenrollCourse = unenrollCourse;
+window.markCourseComplete = markCourseComplete;
+window.openQuiz = openQuiz;
+
+// Load Debugging Script
+const debugScript = document.createElement('script');
+debugScript.src = 'verification.js';
+document.body.appendChild(debugScript);

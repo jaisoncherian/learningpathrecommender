@@ -1,0 +1,6 @@
+@echo off
+echo Starting Learning Path Recommender...
+cd /d "%~dp0"
+call .venv\Scripts\activate
+python backend\app.py
+pause
